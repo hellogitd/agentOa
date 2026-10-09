@@ -1,0 +1,896 @@
+[
+  {
+    "processKey": "onboard",
+    "processName": "入职办理",
+    "formKey": "onboard",
+    "formName": "入职办理单",
+    "businessType": "onboard",
+    "categoryId": 100,
+    "icon": "user",
+    "sort": 1,
+    "remark": "人事 · 新员工入职办理",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "userName", "label": "姓名", "type": "input", "required": true },
+        { "key": "deptName", "label": "入职部门", "type": "input", "required": true },
+        { "key": "positionName", "label": "岗位", "type": "input", "required": true },
+        { "key": "onboardDate", "label": "入职日期", "type": "date", "required": true },
+        { "key": "probationSalary", "label": "试用期薪资", "type": "number", "required": false },
+        { "key": "remark", "label": "备注", "type": "textarea", "required": false }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrRecord", "type": "cc", "name": "抄送人事", "assigneeRule": "ROLE:hr" },
+        { "id": "hrApprove", "type": "approve", "name": "人事办理", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "regularize",
+    "processName": "转正申请",
+    "formKey": "regularize",
+    "formName": "转正申请单",
+    "businessType": "regularize",
+    "categoryId": 100,
+    "icon": "user",
+    "sort": 2,
+    "remark": "人事 · 试用期转正",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "effectiveDate", "label": "转正日期", "type": "date", "required": true },
+        { "key": "probationReview", "label": "试用期总结", "type": "textarea", "required": true },
+        { "key": "regularSalary", "label": "转正薪资", "type": "input", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderReview", "type": "approve", "name": "主管评价", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrReview", "type": "approve", "name": "HR复核", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "probationExtend",
+    "processName": "试用期延长",
+    "formKey": "probationExtend",
+    "formName": "试用期延长单",
+    "businessType": "probation_extend",
+    "categoryId": 100,
+    "icon": "user",
+    "sort": 3,
+    "remark": "人事 · 试用期延长",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "extendMonths", "label": "延长月数", "type": "number", "required": true },
+        { "key": "reason", "label": "延长原因", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrApprove", "type": "approve", "name": "人事复核", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" },
+        { "id": "gmApprove", "type": "approve", "name": "总经理审批", "assigneeRule": "ROLE:gm", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "transfer",
+    "processName": "调岗申请",
+    "formKey": "transfer",
+    "formName": "调岗申请单",
+    "businessType": "transfer",
+    "categoryId": 100,
+    "icon": "user",
+    "sort": 4,
+    "remark": "人事 · 岗位调整",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "oldDept", "label": "原部门", "type": "input", "required": true },
+        { "key": "newDept", "label": "新部门", "type": "input", "required": true },
+        { "key": "newPosition", "label": "新岗位", "type": "input", "required": true },
+        { "key": "effectiveDate", "label": "生效日期", "type": "date", "required": true },
+        { "key": "reason", "label": "调岗原因", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrApprove", "type": "approve", "name": "人事审批", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "salaryChange",
+    "processName": "调薪申请",
+    "formKey": "salaryChange",
+    "formName": "调薪申请单",
+    "businessType": "salary_change",
+    "categoryId": 100,
+    "icon": "money",
+    "sort": 5,
+    "remark": "人事 · 薪酬调整",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "currentSalary", "label": "当前薪资", "type": "number", "required": true },
+        { "key": "newSalary", "label": "调整后薪资", "type": "number", "required": true },
+        { "key": "effectiveDate", "label": "生效日期", "type": "date", "required": true },
+        { "key": "reason", "label": "调薪原因", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrApprove", "type": "approve", "name": "人事审批", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" },
+        { "id": "financeApprove", "type": "approve", "name": "财务复核", "assigneeRule": "ROLE:finance", "signMode": "SINGLE" },
+        { "id": "gmApprove", "type": "approve", "name": "总经理审批", "assigneeRule": "ROLE:gm", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "offboard",
+    "processName": "离职申请",
+    "formKey": "offboard",
+    "formName": "离职申请单",
+    "businessType": "offboard",
+    "categoryId": 100,
+    "icon": "user",
+    "sort": 6,
+    "remark": "人事 · 员工离职",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "effectiveDate", "label": "离职日期", "type": "date", "required": true },
+        {
+          "key": "leaveReason",
+          "label": "离职原因",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "个人原因", "value": "personal" },
+            { "label": "家庭原因", "value": "family" },
+            { "label": "职业发展", "value": "career" },
+            { "label": "薪资原因", "value": "salary" },
+            { "label": "其他", "value": "other" }
+          ]
+        },
+        { "key": "handoverUser", "label": "交接人", "type": "input", "required": true },
+        { "key": "handoverNote", "label": "交接说明", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrInterview", "type": "approve", "name": "HR面谈", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "recruitDemand",
+    "processName": "招聘需求",
+    "formKey": "recruitDemand",
+    "formName": "招聘需求单",
+    "businessType": "recruit_demand",
+    "categoryId": 100,
+    "icon": "peoples",
+    "sort": 7,
+    "remark": "人事 · 用人部门提报招聘需求",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "positionName", "label": "招聘岗位", "type": "input", "required": true },
+        { "key": "headcount", "label": "招聘人数", "type": "number", "required": true },
+        { "key": "urgency", "label": "紧急程度", "type": "select", "required": true, "options": [
+          { "label": "普通", "value": "normal" },
+          { "label": "紧急", "value": "urgent" },
+          { "label": "特急", "value": "critical" }
+        ] },
+        { "key": "reason", "label": "需求说明", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrApprove", "type": "approve", "name": "人事审批", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" },
+        { "id": "gmApprove", "type": "approve", "name": "总经理审批", "assigneeRule": "ROLE:gm", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "training",
+    "processName": "培训申请",
+    "formKey": "training",
+    "formName": "培训申请单",
+    "businessType": "training",
+    "categoryId": 100,
+    "icon": "education",
+    "sort": 8,
+    "remark": "人事 · 内外部培训",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "trainingName", "label": "培训名称", "type": "input", "required": true },
+        { "key": "trainingDate", "label": "培训日期", "type": "date", "required": true },
+        { "key": "cost", "label": "预计费用", "type": "number", "required": true },
+        { "key": "reason", "label": "培训说明", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrApprove", "type": "approve", "name": "人事审批", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "rewardPenalty",
+    "processName": "奖惩申报",
+    "formKey": "rewardPenalty",
+    "formName": "奖惩申报单",
+    "businessType": "reward_penalty",
+    "categoryId": 100,
+    "icon": "star",
+    "sort": 9,
+    "remark": "人事 · 员工奖励与处罚",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        {
+          "key": "category",
+          "label": "奖惩类别",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "奖励", "value": "reward" },
+            { "label": "处罚", "value": "penalty" }
+          ]
+        },
+        { "key": "amount", "label": "奖惩金额", "type": "number", "required": true },
+        { "key": "reason", "label": "事实说明", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrApprove", "type": "approve", "name": "人事审批", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" },
+        { "id": "gmApprove", "type": "approve", "name": "总经理审批", "assigneeRule": "ROLE:gm", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "certificate",
+    "processName": "证明开具",
+    "formKey": "certificate",
+    "formName": "证明开具申请",
+    "businessType": "certificate",
+    "categoryId": 100,
+    "icon": "documentation",
+    "sort": 10,
+    "remark": "人事 · 在职/收入等证明开具",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        {
+          "key": "certificateType",
+          "label": "证明类型",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "在职证明", "value": "employment" },
+            { "label": "收入证明", "value": "income" },
+            { "label": "离职证明", "value": "separation" }
+          ]
+        },
+        { "key": "copies", "label": "份数", "type": "number", "required": true },
+        { "key": "reason", "label": "用途说明", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrApprove", "type": "approve", "name": "人事开具", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" }
+      ]
+    }
+  },
+
+  {
+    "processKey": "reimburse",
+    "processName": "费用报销",
+    "formKey": "reimburse",
+    "formName": "费用报销单",
+    "businessType": "reimburse",
+    "categoryId": 101,
+    "icon": "money",
+    "sort": 11,
+    "remark": "财务 · 费用报销（金额分级审批）",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        {
+          "key": "reimburseType",
+          "label": "报销类型",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "费用报销", "value": "expense" },
+            { "label": "差旅报销", "value": "travel" }
+          ]
+        },
+        {
+          "key": "payMethod",
+          "label": "支付方式",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "银行转账", "value": "bank" },
+            { "label": "现金", "value": "cash" }
+          ]
+        },
+        {
+          "key": "details",
+          "label": "费用明细",
+          "type": "list",
+          "required": true,
+          "itemFields": [
+            { "key": "occurDate", "label": "发生日期", "type": "date" },
+            { "key": "amount", "label": "金额", "type": "number" },
+            { "key": "invoiceNo", "label": "发票号", "type": "input" },
+            { "key": "note", "label": "说明", "type": "input" }
+          ]
+        },
+        { "key": "totalAmount", "label": "报销总额", "type": "input", "required": true },
+        { "key": "reason", "label": "事由", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "financeApprove", "type": "approve", "name": "财务审核", "assigneeRule": "ROLE:finance", "signMode": "SINGLE" },
+        {
+          "id": "amountBranch",
+          "type": "branch",
+          "name": "金额分支",
+          "branches": [
+            { "id": "branchSmall", "name": "1000 元及以下", "condition": { "field": "amount", "op": "le", "value": 1000 }, "nodes": [] },
+            {
+              "id": "branchLarge",
+              "name": "1000 元以上",
+              "condition": { "field": "amount", "op": "gt", "value": 1000 },
+              "nodes": [
+                {
+                  "id": "largeBranch",
+                  "type": "branch",
+                  "name": "大额分支",
+                  "branches": [
+                    {
+                      "id": "branchDirector",
+                      "name": "5000 元以上",
+                      "condition": { "field": "amount", "op": "gt", "value": 5000 },
+                      "nodes": [
+                        { "id": "directorApprove", "type": "approve", "name": "总监审批", "assigneeRule": "ROLE:director", "signMode": "SINGLE" }
+                      ]
+                    },
+                    { "id": "branchNormal", "name": "5000 元及以下", "condition": { "field": "amount", "op": "le", "value": 5000 }, "nodes": [] }
+                  ]
+                },
+                { "id": "cashierNode", "type": "approve", "name": "出纳付款", "assigneeRule": "ROLE:cashier", "signMode": "SINGLE" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "processKey": "loan",
+    "processName": "借款申请",
+    "formKey": "loan",
+    "formName": "借款申请单",
+    "businessType": "loan",
+    "categoryId": 101,
+    "icon": "money",
+    "sort": 12,
+    "remark": "财务 · 员工借款",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "amount", "label": "借款金额", "type": "number", "required": true },
+        { "key": "purpose", "label": "借款用途", "type": "textarea", "required": true },
+        { "key": "repayDate", "label": "预计还款日期", "type": "date", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "financeApprove", "type": "approve", "name": "财务审核", "assigneeRule": "ROLE:finance", "signMode": "SINGLE" },
+        {
+          "id": "amountBranch",
+          "type": "branch",
+          "name": "大额借款分支",
+          "branches": [
+            {
+              "id": "branchBig",
+              "name": "5 万元以上",
+              "condition": { "field": "amount", "op": "gt", "value": 50000 },
+              "nodes": [
+                { "id": "gmApprove", "type": "approve", "name": "总经理审批", "assigneeRule": "ROLE:gm", "signMode": "SINGLE" }
+              ]
+            },
+            { "id": "branchSmall", "name": "5 万元及以下", "condition": { "field": "amount", "op": "le", "value": 50000 }, "nodes": [] }
+          ]
+        },
+        { "id": "cashierNode", "type": "approve", "name": "出纳付款", "assigneeRule": "ROLE:cashier", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "payment",
+    "processName": "付款申请",
+    "formKey": "payment",
+    "formName": "付款申请单",
+    "businessType": "payment",
+    "categoryId": 101,
+    "icon": "money",
+    "sort": 13,
+    "remark": "财务 · 对外付款",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "payeeName", "label": "收款单位", "type": "input", "required": true },
+        { "key": "amount", "label": "付款金额", "type": "number", "required": true },
+        { "key": "invoiceNo", "label": "发票号", "type": "input", "required": false },
+        { "key": "reason", "label": "付款事由", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "financeApprove", "type": "approve", "name": "财务审核", "assigneeRule": "ROLE:finance", "signMode": "SINGLE" },
+        { "id": "gmApprove", "type": "approve", "name": "总经理审批", "assigneeRule": "ROLE:gm", "signMode": "SINGLE" },
+        { "id": "cashierNode", "type": "approve", "name": "出纳付款", "assigneeRule": "ROLE:cashier", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "invoiceApply",
+    "processName": "发票申请",
+    "formKey": "invoiceApply",
+    "formName": "发票申请单",
+    "businessType": "invoice_apply",
+    "categoryId": 101,
+    "icon": "money",
+    "sort": 14,
+    "remark": "财务 · 开票/收票申请",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        {
+          "key": "invoiceDirection",
+          "label": "发票方向",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "开具发票", "value": "issue" },
+            { "label": "收取发票", "value": "receive" }
+          ]
+        },
+        { "key": "amount", "label": "发票金额", "type": "number", "required": true },
+        { "key": "reason", "label": "事由", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "financeApprove", "type": "approve", "name": "财务处理", "assigneeRule": "ROLE:finance", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "budget",
+    "processName": "预算申请",
+    "formKey": "budget",
+    "formName": "预算申请单",
+    "businessType": "budget",
+    "categoryId": 101,
+    "icon": "chart",
+    "sort": 15,
+    "remark": "财务 · 部门预算申请",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "budgetPeriod", "label": "预算期间", "type": "input", "required": true },
+        { "key": "amount", "label": "申请金额", "type": "number", "required": true },
+        { "key": "reason", "label": "预算说明", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "financeApprove", "type": "approve", "name": "财务审核", "assigneeRule": "ROLE:finance", "signMode": "SINGLE" },
+        { "id": "gmApprove", "type": "approve", "name": "总经理审批", "assigneeRule": "ROLE:gm", "signMode": "SINGLE" }
+      ]
+    }
+  },
+
+  {
+    "processKey": "leave",
+    "processName": "请假申请",
+    "formKey": "leave",
+    "formName": "请假申请单",
+    "businessType": "leave",
+    "categoryId": 102,
+    "icon": "date",
+    "sort": 16,
+    "remark": "考勤 · 请假",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        {
+          "key": "leaveType",
+          "label": "请假类型",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "年假", "value": "annual" },
+            { "label": "调休", "value": "compensatory" },
+            { "label": "病假", "value": "sick" },
+            { "label": "事假", "value": "personal" },
+            { "label": "婚假", "value": "marriage" },
+            { "label": "产假", "value": "maternity" },
+            { "label": "陪产假", "value": "paternity" },
+            { "label": "丧假", "value": "bereavement" }
+          ]
+        },
+        { "key": "startTime", "label": "开始时间", "type": "datetime", "required": true },
+        { "key": "endTime", "label": "结束时间", "type": "datetime", "required": true },
+        { "key": "durationMinutes", "label": "时长（分钟）", "type": "number", "required": true, "readonly": true },
+        { "key": "reason", "label": "事由", "type": "textarea", "required": false }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "hrRecord", "type": "approve", "name": "HR备案", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "overtime",
+    "processName": "加班申请",
+    "formKey": "overtime",
+    "formName": "加班申请单",
+    "businessType": "overtime",
+    "categoryId": 102,
+    "icon": "date",
+    "sort": 17,
+    "remark": "考勤 · 加班",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "overtimeDate", "label": "加班日期", "type": "date", "required": true },
+        {
+          "key": "overtimeType",
+          "label": "加班类型",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "工作日", "value": "weekday" },
+            { "label": "周末", "value": "weekend" },
+            { "label": "节假日", "value": "holiday" }
+          ]
+        },
+        { "key": "startTime", "label": "开始时间", "type": "datetime", "required": true },
+        { "key": "endTime", "label": "结束时间", "type": "datetime", "required": true },
+        { "key": "durationMinutes", "label": "时长（分钟）", "type": "number", "required": true, "readonly": true },
+        { "key": "reason", "label": "事由", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "correction",
+    "processName": "补卡申请",
+    "formKey": "correction",
+    "formName": "补卡申请单",
+    "businessType": "correction",
+    "categoryId": 102,
+    "icon": "date",
+    "sort": 18,
+    "remark": "考勤 · 补卡",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "attendanceDate", "label": "考勤日期", "type": "date", "required": true },
+        {
+          "key": "punchType",
+          "label": "时段",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "上班", "value": "1" },
+            { "label": "下班", "value": "2" }
+          ]
+        },
+        { "key": "correctedTime", "label": "补卡时间", "type": "datetime", "required": true },
+        { "key": "reason", "label": "原因", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" }
+      ]
+    }
+  },
+
+  {
+    "processKey": "seal",
+    "processName": "用印申请",
+    "formKey": "seal",
+    "formName": "用印申请单",
+    "businessType": "seal",
+    "categoryId": 104,
+    "icon": "documentation",
+    "sort": 19,
+    "remark": "行政 · 公章/合同章使用",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        {
+          "key": "sealType",
+          "label": "印章类型",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "公章", "value": "official" },
+            { "label": "合同章", "value": "contract" },
+            { "label": "财务章", "value": "finance" }
+          ]
+        },
+        { "key": "usageDate", "label": "用印日期", "type": "date", "required": true },
+        { "key": "copies", "label": "用印份数", "type": "number", "required": true },
+        { "key": "reason", "label": "用印事由", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "adminApprove", "type": "approve", "name": "行政审批", "assigneeRule": "ROLE:admin", "signMode": "SINGLE" },
+        { "id": "gmApprove", "type": "approve", "name": "总经理审批", "assigneeRule": "ROLE:gm", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "supplies",
+    "processName": "办公用品申领",
+    "formKey": "supplies",
+    "formName": "办公用品申领单",
+    "businessType": "supplies",
+    "categoryId": 104,
+    "icon": "component",
+    "sort": 20,
+    "remark": "行政 · 办公用品领用",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        {
+          "key": "items",
+          "label": "申领明细",
+          "type": "list",
+          "required": true,
+          "itemFields": [
+            { "key": "itemName", "label": "物品名称", "type": "input" },
+            { "key": "quantity", "label": "数量", "type": "number" },
+            { "key": "note", "label": "备注", "type": "input" }
+          ]
+        },
+        { "key": "reason", "label": "申领说明", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "adminApprove", "type": "approve", "name": "行政发放", "assigneeRule": "ROLE:admin", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "travel",
+    "processName": "出差申请",
+    "formKey": "travel",
+    "formName": "出差申请单",
+    "businessType": "travel",
+    "categoryId": 104,
+    "icon": "guide",
+    "sort": 21,
+    "remark": "行政 · 出差",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "destination", "label": "出差地点", "type": "input", "required": true },
+        { "key": "startTime", "label": "出发时间", "type": "datetime", "required": true },
+        { "key": "endTime", "label": "返回时间", "type": "datetime", "required": true },
+        { "key": "estimatedCost", "label": "预计费用", "type": "number", "required": true },
+        { "key": "reason", "label": "出差事由", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "gmApprove", "type": "approve", "name": "总经理审批", "assigneeRule": "ROLE:gm", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "vehicle",
+    "processName": "公务用车",
+    "formKey": "vehicle",
+    "formName": "公务用车申请单",
+    "businessType": "vehicle",
+    "categoryId": 104,
+    "icon": "car",
+    "sort": 22,
+    "remark": "行政 · 公务用车",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "useDate", "label": "用车日期", "type": "date", "required": true },
+        { "key": "destination", "label": "目的地", "type": "input", "required": true },
+        { "key": "passengers", "label": "乘车人数", "type": "number", "required": true },
+        { "key": "reason", "label": "用车事由", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "adminApprove", "type": "approve", "name": "行政派车", "assigneeRule": "ROLE:admin", "signMode": "SINGLE" }
+      ]
+    }
+  },
+
+  {
+    "processKey": "countersign",
+    "processName": "会签审批",
+    "formKey": "countersign",
+    "formName": "会签审批单",
+    "businessType": "countersign",
+    "categoryId": 103,
+    "icon": "peoples",
+    "sort": 23,
+    "remark": "其他 · 会签（全员同意）演示模板",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "title", "label": "标题", "type": "input", "required": true },
+        { "key": "reason", "label": "事由", "type": "textarea", "required": true },
+        { "key": "amount", "label": "金额", "type": "number", "required": false }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "deptReview", "type": "approve", "name": "部门会签", "assigneeRule": "ROLE:dept_manager", "signMode": "COUNTERSIGN" },
+        { "id": "hrRecord", "type": "approve", "name": "HR备案", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "eitherSign",
+    "processName": "或签审批",
+    "formKey": "eitherSign",
+    "formName": "或签审批单",
+    "businessType": "either_sign",
+    "categoryId": 103,
+    "icon": "peoples",
+    "sort": 24,
+    "remark": "其他 · 或签（任一同意）演示模板",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "title", "label": "标题", "type": "input", "required": true },
+        { "key": "reason", "label": "事由", "type": "textarea", "required": true },
+        { "key": "amount", "label": "金额", "type": "number", "required": false }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "managerSign", "type": "approve", "name": "主管或签", "assigneeRule": "ROLE:dept_manager", "signMode": "EITHERSIGN" },
+        { "id": "hrRecord", "type": "approve", "name": "HR备案", "assigneeRule": "ROLE:hr", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "genericApply",
+    "processName": "通用申请",
+    "formKey": "genericApply",
+    "formName": "通用申请单",
+    "businessType": "generic_apply",
+    "categoryId": 103,
+    "icon": "form",
+    "sort": 25,
+    "remark": "其他 · 通用 OA 申请（纯表单直接发起）",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        { "key": "title", "label": "标题", "type": "input", "required": true },
+        { "key": "amount", "label": "金额", "type": "number", "required": false },
+        { "key": "reason", "label": "事由", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "leaderApprove", "type": "approve", "name": "主管审批", "assigneeRule": "LEADER", "signMode": "SINGLE" },
+        { "id": "adminApprove", "type": "approve", "name": "行政审批", "assigneeRule": "ROLE:admin", "signMode": "SINGLE" }
+      ]
+    }
+  },
+  {
+    "processKey": "suggestion",
+    "processName": "意见建议",
+    "formKey": "suggestion",
+    "formName": "意见建议单",
+    "businessType": "suggestion",
+    "categoryId": 103,
+    "icon": "message",
+    "sort": 26,
+    "remark": "其他 · 意见建议反馈",
+    "form": {
+      "schemaVersion": 1,
+      "fields": [
+        {
+          "key": "category",
+          "label": "建议类别",
+          "type": "select",
+          "required": true,
+          "options": [
+            { "label": "管理建议", "value": "management" },
+            { "label": "流程优化", "value": "process" },
+            { "label": "办公环境", "value": "office" },
+            { "label": "其他", "value": "other" }
+          ]
+        },
+        { "key": "content", "label": "建议内容", "type": "textarea", "required": true }
+      ]
+    },
+    "chain": {
+      "chainVersion": 1,
+      "nodes": [
+        { "id": "adminApprove", "type": "approve", "name": "行政受理", "assigneeRule": "ROLE:admin", "signMode": "SINGLE" },
+        { "id": "gmApprove", "type": "approve", "name": "总经理阅示", "assigneeRule": "ROLE:gm", "signMode": "SINGLE" }
+      ]
+    }
+  }
+]

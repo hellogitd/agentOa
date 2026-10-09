@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fields": [
+    {"key": "effectiveDate", "label": "离职日期", "type": "date", "required": true},
+    {
+      "key": "leaveReason",
+      "label": "离职原因",
+      "type": "select",
+      "required": true,
+      "options": [
+        {"label": "个人原因", "value": "personal"},
+        {"label": "公司原因", "value": "company"},
+        {"label": "合同到期", "value": "contract_expire"}
+      ]
+    },
+    {"key": "handoverUser", "label": "交接人", "type": "input", "required": true},
+    {"key": "handoverNote", "label": "交接说明", "type": "textarea", "required": false}
+  ]
+}

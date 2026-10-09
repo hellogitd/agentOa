@@ -1,0 +1,209 @@
+{
+  "pages": [
+    {
+      "path": "pages/workbench/index",
+      "style": {
+        "navigationBarTitleText": "工作台",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/approval/index",
+      "style": {
+        "navigationBarTitleText": "审批",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/attendance/index",
+      "style": {
+        "navigationBarTitleText": "考勤打卡",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/mine/index",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/approval/apply",
+      "style": {
+        "navigationBarTitleText": "发起申请"
+      }
+    },
+    {
+      "path": "pages/approval/apply-form",
+      "style": {
+        "navigationBarTitleText": "发起申请"
+      }
+    },
+    {
+      "path": "pages/approval/detail",
+      "style": {
+        "navigationBarTitleText": "审批详情"
+      }
+    },
+    {
+      "path": "pages/attendance/records",
+      "style": {
+        "navigationBarTitleText": "打卡记录",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/attendance/balance",
+      "style": {
+        "navigationBarTitleText": "假期余额",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/notice/index",
+      "style": {
+        "navigationBarTitleText": "公告",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/notice/detail",
+      "style": {
+        "navigationBarTitleText": "公告详情"
+      }
+    },
+    {
+      "path": "pages/message/index",
+      "style": {
+        "navigationBarTitleText": "消息中心",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/mine/profile",
+      "style": {
+        "navigationBarTitleText": "我的档案"
+      }
+    },
+    {
+      "path": "pages/mine/password",
+      "style": {
+        "navigationBarTitleText": "修改密码"
+      }
+    },
+    {
+      "path": "pages/contacts/index",
+      "style": {
+        "navigationBarTitleText": "通讯录",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/calendar/index",
+      "style": {
+        "navigationBarTitleText": "日程",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/knowledge/index",
+      "style": {
+        "navigationBarTitleText": "知识库",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/knowledge/documents",
+      "style": {
+        "navigationBarTitleText": "文档",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/knowledge/preview",
+      "style": {
+        "navigationBarTitleText": "文档预览"
+      }
+    },
+    {
+      "path": "pages/tasks/index",
+      "style": {
+        "navigationBarTitleText": "我的任务",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/finance/reimburse",
+      "style": {
+        "navigationBarTitleText": "报销进度",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/finance/payments",
+      "style": {
+        "navigationBarTitleText": "付款登记",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/ai/chat",
+      "style": {
+        "navigationBarTitleText": "AI 助手"
+      }
+    },
+    {
+      "path": "pages/ai/qa",
+      "style": {
+        "navigationBarTitleText": "知识问答"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "AgentOA",
+    "navigationBarBackgroundColor": "#F5F6F8",
+    "backgroundColor": "#F5F6F8",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#8a90a0",
+    "selectedColor": "#2f6df6",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/workbench/index",
+        "text": "工作台",
+        "iconPath": "static/tab/workbench.png",
+        "selectedIconPath": "static/tab/workbench-active.png"
+      },
+      {
+        "pagePath": "pages/approval/index",
+        "text": "审批",
+        "iconPath": "static/tab/approval.png",
+        "selectedIconPath": "static/tab/approval-active.png"
+      },
+      {
+        "pagePath": "pages/attendance/index",
+        "text": "考勤",
+        "iconPath": "static/tab/attendance.png",
+        "selectedIconPath": "static/tab/attendance-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "static/tab/mine.png",
+        "selectedIconPath": "static/tab/mine-active.png"
+      }
+    ]
+  }
+}

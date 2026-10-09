@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:flowable="http://flowable.org/bpmn"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             targetNamespace="http://agentoa.org/workflow">
+  <process id="reimburse" name="费用报销" isExecutable="true">
+    <startEvent id="start" name="发起"/>
+    <sequenceFlow id="flow-start-leader" sourceRef="start" targetRef="leaderApprove"/>
+    <userTask id="leaderApprove" name="主管审批">
+      <extensionElements>
+        <flowable:taskListener event="create" class="org.dromara.agentoa.workflow.assigner.AssigneeTaskListener">
+          <flowable:field name="rule">
+            <flowable:string>LEADER</flowable:string>
+          </flowable:field>
+        </flowable:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow-leader-finance" sourceRef="leaderApprove" targetRef="financeApprove"/>
+    <userTask id="financeApprove" name="财务审核">
+      <extensionElements>
+        <flowable:taskListener event="create" class="org.dromara.agentoa.workflow.assigner.AssigneeTaskListener">
+          <flowable:field name="rule">
+            <flowable:string>ROLE:finance</flowable:string>
+          </flowable:field>
+        </flowable:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow-finance-gw-small" sourceRef="financeApprove" targetRef="gwSmall"/>
+    <exclusiveGateway id="gwSmall" name="金额是否不超过1000"/>
+    <sequenceFlow id="flow-gw-small-end" sourceRef="gwSmall" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression">${amount_le_1000}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow-gw-small-large" sourceRef="gwSmall" targetRef="gwLarge">
+      <conditionExpression xsi:type="tFormalExpression">${!amount_le_1000}</conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="gwLarge" name="金额是否超过5000"/>
+    <sequenceFlow id="flow-gw-large-director" sourceRef="gwLarge" targetRef="directorApprove">
+      <conditionExpression xsi:type="tFormalExpression">${amount_gt_5000}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow-gw-large-cashier" sourceRef="gwLarge" targetRef="cashierNode">
+      <conditionExpression xsi:type="tFormalExpression">${!amount_gt_5000}</conditionExpression>
+    </sequenceFlow>
+    <userTask id="directorApprove" name="总监审批">
+      <extensionElements>
+        <flowable:taskListener event="create" class="org.dromara.agentoa.workflow.assigner.AssigneeTaskListener">
+          <flowable:field name="rule">
+            <flowable:string>ROLE:director</flowable:string>
+          </flowable:field>
+        </flowable:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow-director-cashier" sourceRef="directorApprove" targetRef="cashierNode"/>
+    <userTask id="cashierNode" name="出纳付款">
+      <extensionElements>
+        <flowable:taskListener event="create" class="org.dromara.agentoa.workflow.assigner.AssigneeTaskListener">
+          <flowable:field name="rule">
+            <flowable:string>ROLE:cashier</flowable:string>
+          </flowable:field>
+        </flowable:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow-cashier-end" sourceRef="cashierNode" targetRef="end"/>
+    <endEvent id="end" name="结束"/>
+  </process>
+  <bpmndi:BPMNDiagram id="Diagram_reimburse">
+    <bpmndi:BPMNPlane bpmnElement="reimburse" id="Plane_reimburse">
+      <bpmndi:BPMNShape bpmnElement="start" id="Shape_start">
+        <dc:Bounds height="30.0" width="30.0" x="100.0" y="135.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="leaderApprove" id="Shape_leaderApprove">
+        <dc:Bounds height="80.0" width="100.0" x="200.0" y="110.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="financeApprove" id="Shape_financeApprove">
+        <dc:Bounds height="80.0" width="100.0" x="380.0" y="110.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gwSmall" id="Shape_gwSmall">
+        <dc:Bounds height="40.0" width="40.0" x="540.0" y="130.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gwLarge" id="Shape_gwLarge">
+        <dc:Bounds height="40.0" width="40.0" x="640.0" y="130.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="directorApprove" id="Shape_directorApprove">
+        <dc:Bounds height="80.0" width="100.0" x="740.0" y="20.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cashierNode" id="Shape_cashierNode">
+        <dc:Bounds height="80.0" width="100.0" x="740.0" y="190.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="Shape_end">
+        <dc:Bounds height="30.0" width="30.0" x="920.0" y="135.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow-start-leader" id="Edge_flow-start-leader">
+        <di:waypoint x="130.0" y="150.0"/>
+        <di:waypoint x="200.0" y="150.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-leader-finance" id="Edge_flow-leader-finance">
+        <di:waypoint x="300.0" y="150.0"/>
+        <di:waypoint x="380.0" y="150.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-finance-gw-small" id="Edge_flow-finance-gw-small">
+        <di:waypoint x="480.0" y="150.0"/>
+        <di:waypoint x="540.0" y="150.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-gw-small-end" id="Edge_flow-gw-small-end">
+        <di:waypoint x="560.0" y="130.0"/>
+        <di:waypoint x="560.0" y="10.0"/>
+        <di:waypoint x="935.0" y="10.0"/>
+        <di:waypoint x="935.0" y="135.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-gw-small-large" id="Edge_flow-gw-small-large">
+        <di:waypoint x="580.0" y="150.0"/>
+        <di:waypoint x="640.0" y="150.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-gw-large-director" id="Edge_flow-gw-large-director">
+        <di:waypoint x="660.0" y="130.0"/>
+        <di:waypoint x="660.0" y="60.0"/>
+        <di:waypoint x="740.0" y="60.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-gw-large-cashier" id="Edge_flow-gw-large-cashier">
+        <di:waypoint x="660.0" y="170.0"/>
+        <di:waypoint x="660.0" y="230.0"/>
+        <di:waypoint x="740.0" y="230.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-director-cashier" id="Edge_flow-director-cashier">
+        <di:waypoint x="790.0" y="100.0"/>
+        <di:waypoint x="790.0" y="190.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow-cashier-end" id="Edge_flow-cashier-end">
+        <di:waypoint x="840.0" y="230.0"/>
+        <di:waypoint x="890.0" y="230.0"/>
+        <di:waypoint x="890.0" y="150.0"/>
+        <di:waypoint x="920.0" y="150.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

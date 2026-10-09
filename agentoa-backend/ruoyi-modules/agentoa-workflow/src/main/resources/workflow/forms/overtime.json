@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "fields": [
+    {"key": "overtimeDate", "label": "加班日期", "type": "date", "required": true},
+    {
+      "key": "overtimeType",
+      "label": "加班类型",
+      "type": "select",
+      "required": true,
+      "options": [
+        {"label": "工作日", "value": "weekday"},
+        {"label": "周末", "value": "weekend"},
+        {"label": "节假日", "value": "holiday"}
+      ]
+    },
+    {"key": "startTime", "label": "开始时间", "type": "datetime", "required": true},
+    {"key": "endTime", "label": "结束时间", "type": "datetime", "required": true},
+    {"key": "durationMinutes", "label": "时长（分钟）", "type": "number", "required": true, "readonly": true},
+    {"key": "reason", "label": "事由", "type": "textarea", "required": false}
+  ]
+}

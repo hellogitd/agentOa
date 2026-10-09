@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fields": [
+    {"key": "attendanceDate", "label": "补卡日期", "type": "date", "required": true},
+    {
+      "key": "punchType",
+      "label": "时段",
+      "type": "select",
+      "required": true,
+      "options": [
+        {"label": "上班", "value": 1},
+        {"label": "下班", "value": 2}
+      ]
+    },
+    {"key": "correctedTime", "label": "补卡时间", "type": "datetime", "required": true},
+    {"key": "reason", "label": "原因", "type": "textarea", "required": true}
+  ]
+}

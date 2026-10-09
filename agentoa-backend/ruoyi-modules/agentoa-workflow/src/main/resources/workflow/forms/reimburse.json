@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "fields": [
+    {
+      "key": "reimburseType",
+      "label": "报销类型",
+      "type": "select",
+      "required": true,
+      "options": [
+        {"label": "日常费用", "value": "expense"},
+        {"label": "差旅费用", "value": "travel"},
+        {"label": "餐费", "value": "meal"},
+        {"label": "办公用品", "value": "office"},
+        {"label": "其他", "value": "other"}
+      ]
+    },
+    {
+      "key": "payMethod",
+      "label": "支付方式",
+      "type": "select",
+      "required": true,
+      "options": [
+        {"label": "银行转账", "value": "BANK_TRANSFER"},
+        {"label": "现金", "value": "CASH"},
+        {"label": "其他", "value": "OTHER"}
+      ]
+    },
+    {
+      "key": "details",
+      "label": "费用明细",
+      "type": "list",
+      "required": true,
+      "itemFields": [
+        {"key": "expenseType", "label": "费用类型", "type": "input"},
+        {"key": "occurDate", "label": "发生日期", "type": "date"},
+        {"key": "amount", "label": "金额", "type": "input"},
+        {"key": "invoiceNo", "label": "发票号", "type": "input"},
+        {"key": "description", "label": "说明", "type": "input"}
+      ]
+    },
+    {"key": "totalAmount", "label": "报销总额", "type": "input", "required": true, "readonly": true},
+    {"key": "reason", "label": "事由", "type": "textarea", "required": false}
+  ]
+}

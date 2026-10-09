@@ -1,0 +1,63 @@
+name: Verify foundation
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  foundation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+          cache: npm
+          cache-dependency-path: |
+            agentoa-frontend/package-lock.json
+            agentoa-uniapp/package-lock.json
+      - name: Backend tests and package
+        run: mvn -B -s scripts/maven-settings.xml -gs scripts/maven-settings.xml -f agentoa-backend/pom.xml -pl ruoyi-admin -am verify -DskipTests=false
+      - name: Frontend lint, build, types and tests
+        working-directory: agentoa-frontend
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run lint:eslint
+          npm run build:prod
+          npm run typecheck
+          npm run test
+      - name: Mobile H5 lint, types and builds
+        working-directory: agentoa-uniapp
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run lint:eslint
+          npm run typecheck
+          npm run build:h5
+          npm run build:mp-weixin
+      - name: Initialize local secrets
+        shell: pwsh
+        run: ./scripts/init-secrets.ps1
+      - name: Start isolated stack
+        run: |
+          mkdir -p .cache
+          docker compose -f deploy/compose.yml -f deploy/compose.smoke.yml config --quiet
+          docker compose -f deploy/compose.yml -f deploy/compose.smoke.yml up --build -d --wait --wait-timeout 240
+      - name: Acceptance smoke
+        run: node scripts/smoke.mjs
+      - name: Provision Playwright for H5 smoke
+        run: |
+          mkdir -p .cache/browser
+          npm install --prefix .cache/browser playwright@1.58.2 --no-audit --no-fund
+          npx --prefix .cache/browser playwright install chromium
+      - name: Mobile H5 smoke
+        run: node scripts/h5-smoke.mjs
+      - name: Service state
+        if: always()
+        run: docker compose -f deploy/compose.yml ps -a
+      - name: Stop stack
+        if: always()
+        run: docker compose -f deploy/compose.yml down

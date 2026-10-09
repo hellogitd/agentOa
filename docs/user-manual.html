@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentOA 用户使用说明</title>
+<style>
+  :root{
+    --primary:#2f6df6; --primary-dark:#1d4fc4; --ink:#1f2937; --muted:#6b7280;
+    --bg:#f5f7fb; --card:#ffffff; --line:#e5e7eb; --ok:#16a34a; --warn:#d97706; --err:#dc2626;
+    --code-bg:#0f172a; --code-ink:#e2e8f0;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth; scroll-padding-top:20px}
+  body{margin:0; font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif; color:var(--ink); background:var(--bg); line-height:1.75}
+  .layout{display:flex; max-width:1280px; margin:0 auto}
+  /* 侧边导航 */
+  nav{width:248px; flex-shrink:0; position:sticky; top:0; height:100vh; overflow-y:auto; padding:24px 12px 40px; background:var(--card); border-right:1px solid var(--line)}
+  nav .brand{font-size:18px; font-weight:700; padding:0 12px 16px; color:var(--primary-dark)}
+  nav .brand small{display:block; font-size:12px; color:var(--muted); font-weight:400; margin-top:2px}
+  nav a{display:block; padding:7px 12px; margin:1px 0; border-radius:8px; color:var(--ink); text-decoration:none; font-size:14px}
+  nav a:hover{background:#eef2ff; color:var(--primary-dark)}
+  nav a.active{background:var(--primary); color:#fff}
+  nav .group{font-size:12px; color:var(--muted); padding:14px 12px 4px; letter-spacing:.05em}
+  main{flex:1; min-width:0; padding:28px 36px 80px}
+  /* 头部 */
+  header.hero{background:linear-gradient(135deg,var(--primary) 0%,#4f46e5 100%); color:#fff; border-radius:16px; padding:32px 36px; margin-bottom:28px}
+  header.hero h1{margin:0 0 8px; font-size:28px}
+  header.hero p{margin:4px 0; opacity:.92; font-size:15px}
+  .hero .meta{margin-top:16px; display:flex; flex-wrap:wrap; gap:10px}
+  .hero .pill{background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35); border-radius:999px; padding:4px 14px; font-size:13px}
+  /* 章节 */
+  section{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:26px 30px; margin-bottom:22px}
+  h2{font-size:22px; margin:0 0 14px; padding-bottom:12px; border-bottom:2px solid var(--line); color:var(--primary-dark)}
+  h3{font-size:17px; margin:22px 0 8px; color:#111827}
+  h4{font-size:15px; margin:16px 0 6px}
+  p{margin:8px 0}
+  ul,ol{padding-left:22px; margin:8px 0}
+  li{margin:4px 0}
+  /* 表格 */
+  table{width:100%; border-collapse:collapse; margin:12px 0; font-size:14px}
+  th,td{border:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top}
+  th{background:#eef2ff; color:#1e3a8a; font-weight:600; white-space:nowrap}
+  tr:nth-child(even) td{background:#fafbff}
+  /* 标签 */
+  .tag{display:inline-block; padding:1px 10px; border-radius:999px; font-size:12px; font-weight:600; margin:0 2px}
+  .tag.ok{background:#dcfce7; color:var(--ok)}
+  .tag.warn{background:#fef3c7; color:var(--warn)}
+  .tag.err{background:#fee2e2; color:var(--err)}
+  .tag.info{background:#dbeafe; color:var(--primary-dark)}
+  /* 提示块 */
+  .note{border-left:4px solid var(--primary); background:#eef2ff; border-radius:0 10px 10px 0; padding:12px 16px; margin:12px 0; font-size:14px}
+  .note.warn{border-color:var(--warn); background:#fffbeb}
+  .note.ok{border-color:var(--ok); background:#f0fdf4}
+  .note.err{border-color:var(--err); background:#fef2f2}
+  .note b{display:block; margin-bottom:2px}
+  /* 代码 */
+  code{background:#eef2ff; color:#3730a3; padding:1px 7px; border-radius:6px; font-family:Consolas,"Cascadia Code",monospace; font-size:13px}
+  pre{background:var(--code-bg); color:var(--code-ink); padding:16px 18px; border-radius:10px; overflow-x:auto; font-size:13px; line-height:1.6}
+  pre code{background:none; color:inherit; padding:0}
+  /* 卡片网格 */
+  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin:14px 0}
+  .card{border:1px solid var(--line); border-radius:12px; padding:16px 18px; background:#fafbff}
+  .card h4{margin:0 0 6px; font-size:15px; color:var(--primary-dark)}
+  .card p{margin:0; font-size:13px; color:var(--muted)}
+  /* 步骤 */
+  .steps{counter-reset:step; list-style:none; padding-left:0}
+  .steps li{counter-increment:step; position:relative; padding:8px 0 8px 44px}
+  .steps li::before{content:counter(step); position:absolute; left:0; top:8px; width:28px; height:28px; border-radius:50%; background:var(--primary); color:#fff; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center}
+  .kbd{background:#1f2937; color:#fff; border-radius:5px; padding:1px 8px; font-size:12px}
+  footer{text-align:center; color:var(--muted); font-size:13px; padding:20px 0 40px}
+  /* 移动端 */
+  .menu-toggle{display:none}
+  @media (max-width:960px){
+    nav{position:fixed; left:-260px; z-index:50; transition:left .25s; box-shadow:0 0 24px rgba(0,0,0,.15)}
+    nav.open{left:0}
+    main{padding:16px 14px 60px}
+    .menu-toggle{display:inline-block; position:fixed; top:14px; right:14px; z-index:60; background:var(--primary); color:#fff; border:none; border-radius:10px; padding:10px 16px; font-size:14px}
+    header.hero{padding:22px}
+  }
+  @media print{
+    nav,.menu-toggle{display:none}
+    section{break-inside:avoid; border:none; padding:0 0 12px}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('open')">☰ 目录</button>
+<div class="layout">
+<nav id="sidenav">
+  <div class="brand">AgentOA<small>企业协同办公平台 · 使用说明</small></div>
+  <div class="group">开始使用</div>
+  <a href="#overview">1. 产品概述</a>
+  <a href="#quickstart">2. 部署与启动</a>
+  <a href="#login">3. 登录与账号安全</a>
+  <a href="#roles">4. 角色与权限</a>
+  <div class="group">功能使用（PC）</div>
+  <a href="#workbench">5. 工作台首页</a>
+  <a href="#hr">6. 组织人事</a>
+  <a href="#workflow">7. 流程审批</a>
+  <a href="#attendance">8. 考勤打卡</a>
+  <a href="#finance">9. 报销财务</a>
+  <a href="#notice">10. 通知公告</a>
+  <a href="#knowledge">11. 知识库</a>
+  <a href="#collaboration">12. 日程 · 会议 · 任务</a>
+  <a href="#report">13. 报表与工作台</a>
+  <div class="group">移动端</div>
+  <a href="#mobile">14. H5 / 微信小程序</a>
+  <div class="group">运维与支持</div>
+  <a href="#cloud">15. 云端服务器部署</a>
+  <a href="#admin">16. 管理员运维</a>
+  <a href="#faq">17. 常见问题（FAQ）</a>
+</nav>
+
+<main>
+<header class="hero">
+  <h1>AgentOA 用户使用说明</h1>
+  <p>面向 10–200 人内部团队的模块化办公系统：组织人事 · 流程审批 · 考勤打卡 · 报销财务 · 公告通知 · 知识库 · 日程会议任务 · 报表看板</p>
+  <p>适用版本：v1.0 功能范围（P0 + P1）｜文档版本 v1.1（新增云端服务器部署教程）｜更新日期 2026-10-05</p>
+  <div class="meta">
+    <span class="pill">PC 管理端（Vue 3 + Element Plus）</span>
+    <span class="pill">移动端 H5 / 微信小程序</span>
+    <span class="pill">单组织 · 权限分级 · 全程留痕</span>
+  </div>
+</header>
+
+<!-- ================= 1 ================= -->
+<section id="overview">
+  <h2>1. 产品概述</h2>
+  <p>AgentOA 是一套可自部署的企业协同办公平台。核心能力覆盖「人事生命周期 → 审批流转 → 考勤/报销业务闭环 → 通知触达 → 知识沉淀 → 协同日程任务 → 数据看板」全链路，所有审批操作幂等防重、越权自动拦截、关键动作写入审计历史。</p>
+  <div class="cards">
+    <div class="card"><h4>组织人事</h4><p>部门/岗位/花名册、入职·转正·离职、调岗调薪、合同管理、Excel 导入导出、员工自助档案</p></div>
+    <div class="card"><h4>流程审批</h4><p>请假、加班、补卡、报销、入职/转正/离职等固定模板；同意/拒绝/转办/退回/加签/催办/抄送/委托</p></div>
+    <div class="card"><h4>考勤打卡</h4><p>上下班打卡与外勤打卡、补卡、假期额度账本与批次、排班、考勤统计与月报导出</p></div>
+    <div class="card"><h4>报销财务</h4><p>报销单、发票防重复占用、费用类型、预算控制、付款登记与财务报表</p></div>
+    <div class="card"><h4>通知公告</h4><p>公告发布/撤回、消息中心、模板消息、定时推送、通知偏好、失败重投</p></div>
+    <div class="card"><h4>知识库</h4><p>知识空间与成员角色、Markdown 文档、草稿/版本/回滚、文件柜、搜索、回收站、目录 ACL</p></div>
+    <div class="card"><h4>日程会议任务</h4><p>日程与可见范围、会议室预约/签到、重复日程、我的任务看板与协作</p></div>
+    <div class="card"><h4>报表工作台</h4><p>工作台聚合、人事/考勤/财务/流程看板、指标口径说明、报表导出任务</p></div>
+  </div>
+  <div class="note"><b>阅读对象</b>本文档面向最终用户（员工/主管/HR/财务/出纳/总监）与系统管理员。开发与验收口径见仓库 <code>docs/</code> 目录的 01–20 号设计文档。</div>
+</section>
+
+<!-- ================= 2 ================= -->
+<section id="quickstart">
+  <h2>2. 部署与启动</h2>
+  <h3>2.1 环境要求</h3>
+  <table>
+    <tr><th>项目</th><th>要求</th></tr>
+    <tr><td>运行环境</td><td>Docker Engine + Compose v2（Windows 需 Docker Desktop + Linux 容器）</td></tr>
+    <tr><td>构建环境</td><td>JDK 17+、Maven 3.6+、Node.js ≥ 20.19（推荐 24.x）</td></tr>
+    <tr><td>浏览器</td><td>Edge / Chrome / Firefox 近两年版本（推荐 Edge）</td></tr>
+    <tr><td>移动端</td><td>手机浏览器（H5）或微信（小程序，需微信开发者工具上传）</td></tr>
+  </table>
+
+  <h3>2.2 一键启动（本地/内网）</h3>
+  <pre><code># 在仓库根目录执行（首次启动建议带 -Build 重新构建镜像）
+./scripts/start-local.ps1 -Build
+
+# PowerShell 执行策略受限时：
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start-local.ps1 -Build</code></pre>
+  <p>启动脚本会自动：初始化密钥（<code>scripts/init-secrets.ps1</code>）→ 构建后端/前端/H5 镜像 → 启动 Compose 全栈并等待健康检查（最长 240 秒）。</p>
+  <table>
+    <tr><th>服务</th><th>地址</th><th>说明</th></tr>
+    <tr><td>Web 门户（用户入口）</td><td><code>http://localhost:18080</code></td><td>PC 管理端静态站点（Nginx）</td></tr>
+    <tr><td>移动端 H5</td><td><code>http://localhost:18082</code></td><td>移动端 H5 静态站点（Nginx）</td></tr>
+    <tr><td>后端 API</td><td><code>http://localhost:18081</code></td><td>Spring Boot（仅供联调/排障直连）</td></tr>
+    <tr><td>MySQL</td><td><code>127.0.0.1:13306</code></td><td>业务数据库 <code>agentoa</code></td></tr>
+    <tr><td>Redis</td><td><code>127.0.0.1:16379</code></td><td>会话与缓存</td></tr>
+    <tr><td>S3 对象存储</td><td><code>127.0.0.1:19000</code></td><td>私有文件桶（SeaweedFS）</td></tr>
+  </table>
+  <div class="note warn"><b>端口约定</b>默认全部端口仅绑定本机地址（127.0.0.1），适合本地/内网验证。对外服务前请先完成 HTTPS/WSS、密钥管理与防火墙配置（云端服务器部署完整教程见 <a href="#cloud">§15</a>）。</div>
+
+  <h3>2.3 日常命令</h3>
+  <pre><code># 仅重启（不重新构建）
+./scripts/start-local.ps1
+
+# 手动构建
+./scripts/build-backend.ps1
+./scripts/build-frontend.ps1 -Install
+./scripts/build-h5.ps1 -Install
+
+# 停止（保留数据卷）
+docker compose -f deploy/compose.yml down
+
+# 查看日志
+docker compose -f deploy/compose.yml logs -f backend web</code></pre>
+
+  <h3>2.4 升级与数据库迁移</h3>
+  <p>数据库结构由 Flyway 版本化迁移管理（V1–V22），升级时按版本顺序自动执行，禁止修改已执行的迁移文件。迁移由独立账号 <code>agentoa_migrate</code> 执行（仅 DDL 权限），业务账号仅有增删改查权限。</p>
+</section>
+
+<!-- ================= 3 ================= -->
+<section id="login">
+  <h2>3. 登录与账号安全</h2>
+  <h3>3.1 登录</h3>
+  <ol class="steps">
+    <li>浏览器打开 <code>http://localhost:18080</code>（云端部署为 <code>https://你的域名</code>），进入登录页。</li>
+    <li>输入管理员账号 <code>admin</code>（当前账号以 <code>deploy/secrets/admin-current-username</code> 为准）。</li>
+    <li>本地开发环境默认密码为 <code>123456</code>（当前密码同步记录在 <code>deploy/secrets/admin-current-password</code>）。<b>生产部署必须立即修改默认密码</b>：全新初始化的环境首次密码取自 <code>deploy/secrets/bootstrap-password</code>。</li>
+    <li>验证码：默认开启（算术验证码）。本地栈已在 <code>deploy/.env</code> 设 <code>CAPTCHA_ENABLED=false</code> 便于接口直连调试；接口直连登录时验证码字段传 <code>captchaCode</code>/<code>captchaUuid</code>（来自 <code>GET /auth/code</code>）。</li>
+    <li>若账号被标记强制改密，登录后会提示设置新密码（12–72 UTF-8 字节），改密后需重新登录。</li>
+  </ol>
+  <div class="note"><b>账号安全规则</b>本地默认凭据 <code>admin/123456</code> 仅限本机/内网开发验证，切勿用于生产；生产请使用强密码并开启验证码。忘记密码请联系管理员在「系统管理 → 用户管理」中重置。连续错误会触发登录限流。会话有效期 2 小时、30 分钟无操作过期；被停用的账号会立即失效其全部会话。</div>
+
+  <h3>3.2 会话与多端</h3>
+  <ul>
+    <li>PC 与移动端使用同一套账号体系与会话令牌（不透明 Bearer，仅存内存）。</li>
+    <li>在「个人中心 → 在线设备」可查看并下线其他设备。</li>
+    <li>右上角铃铛为消息中心入口；头像菜单包含个人中心、修改密码、退出登录。</li>
+  </ul>
+</section>
+
+<!-- ================= 4 ================= -->
+<section id="roles">
+  <h2>4. 角色与权限</h2>
+  <p>系统采用「角色 → 菜单/按钮权限 + 数据范围」的授权模型。给用户分配角色后即时生效（重新登录后菜单刷新）。</p>
+  <table>
+    <tr><th>角色</th><th>角色标识</th><th>典型使用者</th><th>主要权限</th></tr>
+    <tr><td>超级管理员</td><td><code>superadmin</code></td><td>系统管理员</td><td>全部菜单与系统管理（用户/角色/菜单/字典/日志/监控）</td></tr>
+    <tr><td>人力资源</td><td><code>hr</code></td><td>HR / 人事专员</td><td>组织与花名册全量维护、入职转正离职、异动调薪、合同、公告发布、模板与定时推送、考勤维护、全模块报表</td></tr>
+    <tr><td>部门经理</td><td><code>dept_manager</code></td><td>部门负责人/直属主管</td><td>本部门数据范围内的审批、考勤查看、报表看板、任务与日程</td></tr>
+    <tr><td>普通员工</td><td><code>employee</code></td><td>全员</td><td>自助档案、发起申请、我的待办、打卡、余额查询、公告与消息、知识库参与、任务与日程自助</td></tr>
+    <tr><td>财务</td><td><code>finance</code></td><td>财务人员</td><td>发票/费用类型/预算管理、报销审核视角、付款、财务报表与导出</td></tr>
+    <tr><td>出纳</td><td><code>cashier</code></td><td>出纳</td><td>付款登记、待付款清单、财务报表只读</td></tr>
+    <tr><td>总监</td><td><code>director</code></td><td>高管</td><td>审批与全模块报表看板（只读为主）</td></tr>
+  </table>
+  <div class="note warn"><b>数据权限</b>除按钮权限外，列表/详情/导出/文件下载均做对象级校验：私有数据越权返回 404、功能越权返回 403。例如私有日程、他人草稿、部门外花名册明细对无权用户不可见。</div>
+  <h3>4.1 如何创建用户并授权（管理员）</h3>
+  <ol class="steps">
+    <li>「系统管理 → 用户管理 → 新增」填写账号/姓名/部门，初始密码由系统生成后强制首登修改。</li>
+    <li>在用户行点「更多 → 分配角色」勾选所需角色（可多角色叠加）。</li>
+    <li>如需按部门授权，「系统管理 → 角色管理」编辑角色的数据范围（本部门/全部/自定义）。</li>
+    <li>员工入职建档请优先走「人事 → 花名册 → 入职」，可同时开通系统账号。</li>
+  </ol>
+</section>
+
+<!-- ================= 5 ================= -->
+<section id="workbench">
+  <h2>5. 工作台首页</h2>
+  <p>登录后进入工作台（<code>/index</code>），聚合展示与你相关的待办信息：</p>
+  <ul>
+    <li><b>我的待办</b>：待审批任务，点击直达审批详情；</li>
+    <li><b>我发起的</b>：申请进度与当前节点；</li>
+    <li><b>考勤状态</b>：今日打卡情况；</li>
+    <li><b>假期余额</b>：各类假种剩余分钟/天数；</li>
+    <li><b>今日日程</b>：今日会议与日程安排；</li>
+    <li><b>公告</b>：最新公告速览。</li>
+  </ul>
+  <p>左侧菜单按角色动态下发；顶部可切换语言、调整布局、进入个人中心。</p>
+</section>
+
+<!-- ================= 6 ================= -->
+<section id="hr">
+  <h2>6. 组织人事（HR）</h2>
+  <h3>6.1 组织与岗位</h3>
+  <ul>
+    <li><b>部门管理</b>：树形组织维护，支持新增/编辑/启停用/删除；部门与岗位名称在组织内唯一。</li>
+    <li><b>岗位管理</b>：岗位 CRUD，被员工引用的岗位不可删除。</li>
+  </ul>
+  <h3>6.2 花名册与员工生命周期</h3>
+  <table>
+    <tr><th>操作</th><th>入口</th><th>说明</th></tr>
+    <tr><td>建档/入职</td><td>花名册 → 入职</td><td>填写档案与岗位信息，可同时创建系统账号（账号一经关联不可换绑）</td></tr>
+    <tr><td>转正</td><td>员工详情 → 转正</td><td>状态 试用期 → 正式；也可走「转正申请」流程由审批驱动</td></tr>
+    <tr><td>离职</td><td>员工详情 → 离职</td><td>状态 离职中 → 已离职；生效后账号冻结、会话立即失效</td></tr>
+    <tr><td>状态修正</td><td>员工详情 → 状态</td><td>仅允许修正初始状态；在职生命周期由审批驱动</td></tr>
+    <tr><td>变动历史</td><td>员工详情 → 变动记录</td><td>岗位/部门/状态/薪资变动全程留痕（含操作人与时间）</td></tr>
+    <tr><td>导入/导出</td><td>花名册 → 导入 / 导出</td><td>Excel 导入带校验预览与报错行提示；导出按筛选条件</td></tr>
+  </table>
+  <h3>6.3 调岗调薪 / 合同 / 经历（P1）</h3>
+  <ul>
+    <li><b>异动管理</b>：调岗、调薪申请（携带 <code>Idempotency-Key</code> 幂等，重复提交不重复生效）；到期异动可一键执行。</li>
+    <li><b>薪资保密</b>：薪资字段 AES-256-GCM 加密存储，仅具备「薪资敏感」权限（<code>hr:change:sensitive</code>）者可见明文。</li>
+    <li><b>合同管理</b>：合同 CRUD、续签提醒（「即将到期合同」列表）。</li>
+    <li><b>教育/工作经历</b>：HR 可维护任意员工；员工本人可在「自助档案」维护自己的经历。</li>
+    <li><b>员工自助</b>：「个人中心 / 自助档案」查看与更新本人可维护字段。</li>
+  </ul>
+  <div class="note"><b>提示</b>删除部门/岗位前请先确认无员工引用；员工身份证/手机号等敏感字段对普通角色脱敏展示。</div>
+</section>
+
+<!-- ================= 7 ================= -->
+<section id="workflow">
+  <h2>7. 流程审批</h2>
+  <h3>7.1 发起申请</h3>
+  <p>入口：<b>流程审批 → 我发起的 → 发起申请</b>（移动端见 §14）。选择流程模板后按表单填写并提交，系统生成申请单草稿 → 提交后进入审批流转。</p>
+  <table>
+    <tr><th>模板</th><th>业务单</th><th>关键校验</th></tr>
+    <tr><td>请假申请</td><td>请假单</td><td>假种/时长与假期额度联动，超额直接拒绝提交</td></tr>
+    <tr><td>加班申请</td><td>加班单</td><td>加班时长与类型；审批通过后计入加班台账</td></tr>
+    <tr><td>补卡申请</td><td>补卡单</td><td>补卡窗口限制；通过后补写打卡记录（一次生效）</td></tr>
+    <tr><td>报销申请</td><td>报销单</td><td>明细金额、发票占用、预算校验；明细超发票面额拒绝</td></tr>
+    <tr><td>入职 / 转正 / 离职申请</td><td>生命周期申请单</td><td>审批通过后驱动 HR 状态流转（转正 PROBATION→ACTIVE、离职 LEAVE_PENDING→LEFT）</td></tr>
+    <tr><td>会签 / 或签（示例模板）</td><td>通用表单</td><td>会签需全员通过；或签任一通过即通过</td></tr>
+  </table>
+  <h3>7.2 处理待办</h3>
+  <ul>
+    <li><b>待办</b>：列表显示标题/模板/当前节点；进入详情可查看表单、流转历史、流程图。</li>
+    <li><b>同意 / 拒绝</b>：填写意见后提交；拒绝需填原因。</li>
+    <li><b>转办</b>：将当前任务转交他人办理。</li>
+    <li><b>退回</b>：退回指定历史节点重新办理。</li>
+    <li><b>加签</b>：前加签（当前人之前插入办理人）/ 后加签（当前人之后追加）。</li>
+    <li><b>催办</b>：向当前办理人发送催办通知（重复催办去重）。</li>
+    <li><b>抄送</b>：将办理中的实例抄送给他人知会。</li>
+  </ul>
+  <h3>7.3 我发起的 / 已办 / 抄送</h3>
+  <ul>
+    <li><b>我发起的</b>：可撤销审批中的实例（撤销后业务单同步撤回并释放占用）。</li>
+    <li><b>已办</b>：历史办理记录，可追溯操作人、意见与时间。</li>
+    <li><b>抄送</b>：他人抄送给我的实例列表。</li>
+  </ul>
+  <h3>7.4 管理与监控（授权角色）</h3>
+  <ul>
+    <li><b>流程定义</b>：查看模板与版本（DRAFT/PUBLISHED/RETIRED）、表单 schema、发布新版本；已发布版本不可修改，历史实例不受影响。</li>
+    <li><b>流程监控</b>：实例挂起 / 恢复 / 终止（终止会把业务单置为合理终态并通知）。</li>
+    <li><b>委托管理</b>：设置委托人、有效期与范围；委托期间待办自动转给受托人。</li>
+    <li><b>超时扫描</b>：标记发起超过 24 小时仍在途的实例（超时标识 + 每实例一次去重通知）。</li>
+  </ul>
+  <div class="note warn"><b>并发与幂等</b>重复点击提交不会生成两单（同幂等键重放返回首次结果，同键不同请求返回 409）；版本冲突或状态冲突会返回 409 并提示刷新后重试，不会造成数据错乱。</div>
+</section>
+
+<!-- ================= 8 ================= -->
+<section id="attendance">
+  <h2>8. 考勤打卡</h2>
+  <h3>8.1 打卡</h3>
+  <ul>
+    <li><b>上下班打卡</b>：「考勤 → 打卡」一键打卡，自动识别上午/下午班次；重复打卡返回窗口错误提示。</li>
+    <li><b>外勤打卡</b>：需同时提供 GPS 定位 + 现场照片（先上传照片再打卡）；适用于出差/外勤场景。</li>
+    <li><b>补卡</b>：漏打卡通过「补卡申请」走审批，通过后补写记录（一次生效，重复不叠加）。</li>
+    <li><b>我的记录</b>：按日查看打卡明细、出勤状态（正常/迟到/早退/缺勤/请假）、异常原因。</li>
+  </ul>
+  <h3>8.2 假期与额度</h3>
+  <ul>
+    <li><b>额度账本</b>：八类假种按分钟记账（480 分钟/天折算），发假/冻结/结算/释放/调整全程流水可查。</li>
+    <li><b>假期批次</b>（P1）：HR 发假支持有效期批次，按「先到期先扣」（FIFO）核销；过期额度自动作废（含定时扫描与手动扫描按钮）。</li>
+    <li><b>余额查询</b>：员工自助查看本人余额与台账；HR/主管可查本部门。</li>
+  </ul>
+  <h3>8.3 排班与规则维护（HR/管理员）</h3>
+  <ul>
+    <li><b>班次管理</b>：固定班 / 弹性班 / 跨夜班；跨夜班自动按日切分计算。</li>
+    <li><b>考勤组</b>：按部门/人员分组，绑定班次与日历。</li>
+    <li><b>排班</b>（P1）：按人按日指定班次（一天一班），可批量覆盖同日排班。</li>
+    <li><b>考勤日历/节假日</b>：维护工作日与法定节假日，节假日打卡不计迟到早退。</li>
+  </ul>
+  <h3>8.4 统计与导出</h3>
+  <p>「考勤 → 报表」支持日统计、月统计与 Excel 导出（HR/主管权限）。日终自动结算出勤/请假/加班/异常，原始打卡记录全部保留可追溯。</p>
+</section>
+
+<!-- ================= 9 ================= -->
+<section id="finance">
+  <h2>9. 报销财务</h2>
+  <h3>9.1 员工：报销申请</h3>
+  <ol class="steps">
+    <li>「流程审批 → 发起申请 → 报销申请」（或移动端）填写明细：金额、费用类型、可选发票与说明。</li>
+    <li>提交前系统校验：明细金额、发票可用额度、预算余额；超额/超预算直接提示并拒绝提交。</li>
+    <li>提交后进入审批；审批通过进入「待付款」。</li>
+  </ol>
+  <h3>9.2 财务：发票与费用类型</h3>
+  <ul>
+    <li><b>发票管理</b>：登记发票（号码/代码唯一 + 规范化指纹去重），上传发票图片；同一发票重复登记返回 409。</li>
+    <li><b>发票占用</b>：报销提交时自动占用额度，拒绝/撤销自动释放；一票可拆分到多单，累计不得超面额。</li>
+    <li><b>费用类型</b>：维护报销费用分类（被引用不可删除）。</li>
+    <li><b>预算管理</b>（P1）：部门/项目预算与占用流水，提交/通过/转办/拒绝联动预算占用与释放，预算不足返回 409。</li>
+  </ul>
+  <h3>9.3 出纳：付款登记</h3>
+  <ul>
+    <li>「财务 → 付款管理 → 待付款」查看已通过未付款的报销单。</li>
+    <li>登记付款：金额、方式、流水号、备注；支持<b>分次付款</b>（多次付款累计不超过应付金额），每次登记需携带幂等键防重复。</li>
+    <li>付款完成后报销单状态自动推进为「已付款」，付款记录不可重复登记（重复返回 409）。</li>
+  </ul>
+  <h3>9.4 报表</h3>
+  <p>「财务 → 财务报表」提供费用类型分布、月度费用趋势（按发生日期区间、状态口径统计），支持 Excel 导出。口径详见报表模块的「指标口径」说明。</p>
+</section>
+
+<!-- ================= 10 ================= -->
+<section id="notice">
+  <h2>10. 通知公告</h2>
+  <h3>10.1 公告</h3>
+  <ul>
+    <li><b>起草</b>（HR）：标题、正文、公告类型、密级、受众范围（全员 / 部门 / 角色 / 指定人），可定时发布与失效时间。</li>
+    <li><b>发布</b>：发布瞬间固化内容与受众快照；发布后正文不可修改。</li>
+    <li><b>撤回</b>：撤回后受众不可见，本人/发布人可见并留痕。</li>
+    <li><b>已读统计</b>：按受众快照统计已读/未读名单（分母为快照人数），发布人/管理者可见。</li>
+    <li><b>阅读</b>：全员可浏览公告并自动标记已读（幂等，重复不重复计数）。</li>
+  </ul>
+  <h3>10.2 消息中心</h3>
+  <ul>
+    <li>分类：<b>待办 / 公告 / 提及 / 系统</b>，支持未读筛选、全部已读、单条删除（软删除，保留审计）。</li>
+    <li>待办消息可跳转到对应业务（审批、任务等）。</li>
+    <li>实时提醒通过 WebSocket 推送；断线后自动补拉，不会丢消息。</li>
+    <li><b>通知偏好</b>：在消息中心设置各类消息是否提醒。</li>
+  </ul>
+  <h3>10.3 模板消息与定时推送（HR）</h3>
+  <ul>
+    <li><b>模板管理</b>：内置「入职欢迎、生日祝福、考勤异常提醒」模板；模板使用 <code>{变量}</code> 占位符，发送时变量缺失会提示（不执行表达式，安全）。</li>
+    <li><b>模板发送</b>：选择受众即时发送。</li>
+    <li><b>定时推送</b>：创建推送计划（类型/周期/受众/模板或公告），支持暂停/恢复、执行历史、手动触发一次。</li>
+    <li>失败的推送会记录执行结果并可由管理员在消息事件中重投。</li>
+  </ul>
+  <h3>10.4 管理员：投递事件</h3>
+  <p>「消息中心 → 投递事件」（管理员/授权角色）：查询失败事件、手动重投（有重投次数与时间审计）；失败 5 次自动转 FAILED 待人工处理。</p>
+</section>
+
+<!-- ================= 11 ================= -->
+<section id="knowledge">
+  <h2>11. 知识库</h2>
+  <h3>11.1 空间与成员</h3>
+  <ul>
+    <li><b>空间</b>：按部门/主题建立知识空间（类型：公司/部门/项目/个人）。</li>
+    <li><b>成员角色</b>：OWNER（拥有者）/ EDITOR（可编辑）/ COMMENTER（可评论）/ VIEWER（只读）；OWNER 不可被移除、降级。</li>
+  </ul>
+  <h3>11.2 文档</h3>
+  <ul>
+    <li><b>Markdown 编辑</b>：所见即所得预览、目录树（支持多级子目录）、拖动归类。</li>
+    <li><b>草稿与发布</b>：编辑自动存个人草稿（30 天）；发布产生新版本；状态：草稿 / 已发布 / 已归档。</li>
+    <li><b>版本与回滚</b>：版本历史只追加不可改；对比差异；回滚生成新版本；并发编辑冲突返回 409（提示刷新重试）。</li>
+    <li><b>目录 ACL</b>（P1）：对目录/文档单独授权（用户/主体级），可设置「仅目录 ACL 生效」的强覆盖模式。</li>
+    <li><b>回收站</b>：删除进回收站，30 天内可恢复；到期清理。</li>
+    <li><b>搜索</b>：按标题与正文全文匹配，结果高亮，严格按空间权限过滤（无权文档不可见也不可搜到）。</li>
+  </ul>
+  <h3>11.3 文件柜与互动</h3>
+  <ul>
+    <li><b>文件柜</b>：上传附件（≤20 MiB，扩展名/魔数/MIME 三重校验），预览（图片/PDF/文本）、下载、删除、回收站恢复；下载有审计与时间限制。</li>
+    <li><b>评论 / 点赞 / 收藏</b>（P1）：COMMENTER 及以上可评论；收藏夹页面集中查看。</li>
+    <li><b>个人收藏</b>：收藏文档快捷入口。</li>
+  </ul>
+  <div class="note"><b>权限要点</b>知识库默认拒绝：未被授权的空间/文档，即使知道链接也返回 404/403。分享文档请通过成员管理或目录 ACL 显式授权。</div>
+</section>
+
+<!-- ================= 12 ================= -->
+<section id="collaboration">
+  <h2>12. 日程 · 会议 · 任务</h2>
+  <h3>12.1 日程</h3>
+  <ul>
+    <li><b>我的日程</b>：日视图浏览、日期切换、新建/编辑/删除日程（仅组织者可改删）。</li>
+    <li><b>可见范围</b>：私有 / 参与人可见 / 部门可见 / 全员可见；越权访问私有日程返回 404。</li>
+    <li><b>参与人</b>：邀请同事，接受/拒绝邀请；参与人变更会通知。</li>
+    <li><b>重复日程</b>（P1）：按重复规则（每天/每周/每月/每年 + 间隔 + 星期/月日 + 次数/截止）预生成实例，支持单次例外调整。</li>
+    <li>修改/删除提交版本号校验，冲突返回 409。</li>
+  </ul>
+  <h3>12.2 会议室与预约</h3>
+  <ol class="steps">
+    <li>「会议室」查看房间状态（可用/维护中）与当日预约。</li>
+    <li>发起预约：选择日程、时间段；系统按行锁检测冲突（左闭右开，首尾相接不冲突），冲突返回 409。</li>
+    <li>会议开始前后可「签到」（仅预订人/组织者，一次生效）；不能参会可「取消」，自动释放时段。</li>
+    <li>维护（HR）：房间信息维护、停用/启用。</li>
+  </ol>
+  <h3>12.3 我的任务</h3>
+  <ul>
+    <li><b>列表 / 看板</b>：按状态五列看板（待办 / 进行中 / 已阻塞 / 已完成 / 已取消）。</li>
+    <li><b>状态与进度</b>：合法状态流转；非法跳转提示 409；完成自动置进度 100% 与完成时间，终态后不可再修改。</li>
+    <li><b>协作</b>：添加协作者、评论、活动流（创建/状态/进度/评论/成员变动全程留痕），相关变更自动通知负责人/指派人。</li>
+    <li>任务起止时间为日期（yyyy-MM-dd），支持优先级。</li>
+  </ul>
+</section>
+
+<!-- ================= 13 ================= -->
+<section id="report">
+  <h2>13. 报表与工作台</h2>
+  <ul>
+    <li><b>工作台</b>（<code>/index</code>）：待办、发起、考勤、余额、日程、公告聚合。</li>
+    <li><b>人事看板</b>：人数、部门分布、入离职、异动统计。</li>
+    <li><b>考勤看板</b>：出勤率、请假/加班分布、异常统计。</li>
+    <li><b>财务看板</b>：费用类型分布、月度趋势、待付款。</li>
+    <li><b>流程看板</b>：申请/通过/拒绝分列、平均处理时长、超时在途。</li>
+    <li><b>指标口径</b>：每个指标附口径说明（时间范围、状态过滤、去重规则），保证对账一致；口径变更会升版本并记录。</li>
+    <li><b>导出</b>：按筛选条件导出（导出任务记录操作者、条件、行数、口径版本）；导出文件为私有存储，仅本人可下载。</li>
+  </ul>
+  <div class="note"><b>口径示例</b>出勤率 = 实际出勤分钟 ÷（计划 − 已批准请假）；区间为自然日闭区间；申请/批准/实付分列不混计；平均处理时长仅计已通过实例。</div>
+</section>
+
+<!-- ================= 14 ================= -->
+<section id="mobile">
+  <h2>14. 移动端（H5 / 微信小程序）</h2>
+  <h3>14.1 获取入口</h3>
+  <table>
+    <tr><th>端</th><th>方式</th></tr>
+    <tr><td>H5</td><td>手机浏览器直接访问 H5 部署地址（如 <code>http://服务器:18082</code>）；开发模式端口 5174</td></tr>
+    <tr><td>微信小程序</td><td>执行 <code>npm run build:mp-weixin</code> 后用「微信开发者工具」导入 <code>agentoa-uniapp/dist/build/mp-weixin</code> 预览/上传（需小程序 AppID 与服务器域名白名单）</td></tr>
+  </table>
+  <h3>14.2 页面导航</h3>
+  <p>底部四个页签：<b>工作台 / 审批 / 考勤 / 我的</b>。</p>
+  <table>
+    <tr><th>页面</th><th>功能</th></tr>
+    <tr><td>工作台</td><td>待办、公告、工作台数据聚合（下拉刷新）</td></tr>
+    <tr><td>审批</td><td>待办/已办/我发起的列表；<b>发起申请</b>（请假/加班/补卡/报销/生命周期）；<b>审批详情</b>（同意/拒绝/转办，查看历史与流程图）</td></tr>
+    <tr><td>考勤</td><td>一键打卡、今日状态、<b>打卡记录</b>、<b>假期余额</b></td></tr>
+    <tr><td>公告/消息</td><td>公告列表与详情、消息中心（待办/公告/提及/系统分类、已读、删除）</td></tr>
+    <tr><td>我的</td><td>个人档案（查看/更新可维护字段）、修改密码、退出登录</td></tr>
+  </table>
+  <div class="note warn"><b>注意</b>移动端与 PC 权限一致；部分管理类功能（流程定义、预算维护、模板管理等）仅在 PC 端提供。小程序正式发布前需在微信公众平台配置服务器域名（request/uploadFile 合法域名）。</div>
+</section>
+
+<!-- ================= 15 ================= -->
+<section id="cloud">
+  <h2>15. 云端服务器部署教程</h2>
+  <p>本章面向运维/实施人员，讲解把 AgentOA 部署到云服务器（阿里云 ECS、腾讯云 CVM、AWS EC2 等）并以 HTTPS 对外服务的完整流程。与 §2 的本地部署使用同一套 <code>deploy/</code> Compose 工程，区别在于：<b>在 Linux 服务器上构建产物与镜像、密钥改用 Linux 方式生成、外层再加一层 TLS 反向代理</b>。</p>
+
+  <h3>15.1 服务器规划与准备</h3>
+  <table>
+    <tr><th>项目</th><th>建议</th></tr>
+    <tr><td>规格</td><td>推荐 8 vCPU / 16 GiB / SSD（约 200 人并发够用）；试运行/验证环境最低 2 vCPU / 4 GiB（需调小 JVM 与 MySQL 缓存）</td></tr>
+    <tr><td>操作系统</td><td>Ubuntu 22.04 / 24.04 LTS、Debian 12、CentOS Stream 9 等主流 64 位 Linux（内核 ≥ 5.x）</td></tr>
+    <tr><td>磁盘</td><td>系统盘 ≥ 60 GiB；数据盘 ≥ 100 GiB（MySQL + 文件存储 + 备份），建议挂载到 <code>/data</code></td></tr>
+    <tr><td>网络</td><td>绑定公网 IP 或挂负载均衡；准备域名（如 <code>oa.example.com</code>，国内主机需完成 ICP 备案）</td></tr>
+    <tr><td>安全组/防火墙</td><td>对外仅开 <code>22</code>（限管理 IP）、<code>80</code>、<code>443</code>；<code>13306/16379/19000/18081</code> 不对公网开放</td></tr>
+    <tr><td>软件</td><td>Docker Engine 24+ 与 Compose v2 插件、Git、JDK 17+、Maven 3.6+、Node.js ≥ 20.19（服务器构建时需要 JDK/Maven/Node；若仅导入镜像则不需要）</td></tr>
+  </table>
+  <pre><code># Ubuntu/Debian 安装 Docker（官方源）
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER   # 重新登录生效
+docker compose version          # 确认 v2 插件可用</code></pre>
+  <div class="note warn"><b>硬件资源不足时</b>可在 <code>deploy/compose.yml</code> 中下调 MySQL 缓存与 Redis <code>--maxmemory</code>；4 GiB 内存机器建议把 <code>JAVA_TOOL_OPTIONS</code> 的 <code>-XX:MaxRAMPercentage</code> 降到 50。</div>
+
+  <h3>15.2 获取代码与构建产物</h3>
+  <p>方式 A（在服务器上构建，适合首次实施）：</p>
+  <pre><code># 1) 获取代码
+git clone &lt;仓库地址&gt; agentoa &amp;&amp; cd agentoa
+
+# 2) 构建后端 JAR（产出 agentoa-backend/ruoyi-admin/target/ruoyi-admin.jar）
+cd agentoa-backend
+mvn -B -pl ruoyi-admin -am clean verify -DskipTests
+cd ..
+
+# 3) 构建前端静态资源（产出 agentoa-frontend/dist/）
+cd agentoa-frontend
+npm ci --ignore-scripts --no-audit --no-fund
+npm run build:prod
+cd ..
+
+# 4) 构建移动端 H5 静态资源（产出 agentoa-uniapp/dist/build/h5/）
+cd agentoa-uniapp
+npm ci --ignore-scripts --no-audit --no-fund
+npm run build:h5
+cd ..
+
+# 5) 构建 Docker 镜像（在仓库根目录执行）
+docker build -f deploy/backend.Dockerfile  -t agentoa/backend:0.1.0 .
+docker build -f deploy/frontend.Dockerfile -t agentoa/web:0.1.0    .
+docker build -f deploy/h5.Dockerfile       -t agentoa/h5:0.1.0     .</code></pre>
+  <p>方式 B（本地/CI 构建镜像后上传，服务器无需 JDK/Node）：</p>
+  <pre><code># 开发机（Windows/Linux）：
+docker build -f deploy/backend.Dockerfile  -t agentoa/backend:0.1.0 .
+docker build -f deploy/frontend.Dockerfile -t agentoa/web:0.1.0    .
+docker build -f deploy/h5.Dockerfile       -t agentoa/h5:0.1.0     .
+docker save agentoa/backend:0.1.0 agentoa/web:0.1.0 agentoa/h5:0.1.0 -o agentoa-images.tar
+
+# 服务器：
+scp agentoa-images.tar user@服务器:/opt/
+ssh user@服务器
+docker load -i /opt/agentoa-images.tar</code></pre>
+  <p>方式 C（私有镜像仓库）：CI 推送 <code>registry.example.com/agentoa/backend:0.1.0</code> 等到仓库，服务器 <code>docker pull</code> 后给镜像打上 <code>agentoa/backend:0.1.0</code> 本地标签（或直接改 <code>deploy/compose.yml</code> 的 <code>image:</code>）。建议生产使用带 <code>sha256:</code> 摘要的不可变镜像引用。</p>
+
+  <h3>15.3 生成密钥与配置</h3>
+  <p>生产环境请在服务器上生成密钥（不要把 Windows 本机的 <code>deploy/secrets/</code> 直接拷上服务器）：</p>
+  <pre><code>cd deploy/secrets
+for f in mysql-root-password db-password migration-password backup-password \
+         redis-password s3-secret-key bootstrap-password; do
+  [ -s "$f" ] || openssl rand -hex 24 &gt; "$f"
+done
+[ -s s3-access-key ] || openssl rand -hex 10 &gt; s3-access-key
+chmod 600 *          # 仅属主可读写</code></pre>
+  <p>再编写 S3 访问配置 <code>deploy/secrets/s3-config</code>（把 accessKey/secretKey 替换为上面两个文件的内容）：</p>
+  <pre><code>{
+  "identities": [
+    {
+      "name": "agentoa",
+      "credentials": [
+        { "accessKey": "&lt;s3-access-key 文件内容&gt;", "secretKey": "&lt;s3-secret-key 文件内容&gt;" }
+      ],
+      "actions": ["Read:agentoa", "Write:agentoa", "List:agentoa"]
+    }
+  ]
+}</code></pre>
+  <p>创建非敏感环境配置 <code>deploy/.env</code>（WebSocket 允许来源必须写对外访问的 HTTPS 域名）：</p>
+  <pre><code>CAPTCHA_ENABLED=true
+WS_ALLOWED_ORIGINS=https://oa.example.com</code></pre>
+  <div class="note err"><b>密钥纪律</b><code>deploy/secrets/</code> 禁止提交到代码仓库、禁止复制进文档/聊天工具；轮换密码后需同步更新 <code>s3-config</code> 并重启对应服务。管理员初始密码仅存在于 <code>bootstrap-password</code>，首次登录改密后即作废。</div>
+
+  <h3>15.4 端口暴露与 HTTPS 反向代理</h3>
+  <p>Compose 默认把端口绑定在 <code>127.0.0.1</code> 上（<code>18080</code> Web、<code>18082</code> H5、<code>18081</code> 后端、<code>13306/16379/19000</code> 中间件），<b>保持不变</b>，由宿主机 Nginx（或云负载均衡）在 443 上做 TLS 终止后转发到本机 18080。</p>
+  <p>安装宿主机 Nginx 并申请证书（以 certbot 为例）：</p>
+  <pre><code>sudo apt install -y nginx certbot python3-certbot-nginx
+sudo certbot --nginx -d oa.example.com     # 自动写入证书与 80 跳转</code></pre>
+  <p>站点配置 <code>/etc/nginx/conf.d/agentoa.conf</code>（443 反代 + WebSocket 升级 + 上传大小与应用内 20 MiB 限制匹配）：</p>
+  <pre><code>server {
+  listen 443 ssl http2;
+  server_name oa.example.com;
+  ssl_certificate     /etc/letsencrypt/live/oa.example.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/oa.example.com/privkey.pem;
+
+  client_max_body_size 21m;          # 应用文件上限 20 MiB，预留协议开销
+  proxy_read_timeout 120s;
+
+  location / {
+    proxy_pass http://127.0.0.1:18080;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+}
+server {
+  listen 80;
+  server_name oa.example.com;
+  return 301 https://$host$request_uri;
+}</code></pre>
+  <ul>
+    <li>WebSocket 依赖 <code>Upgrade/Connection</code> 两行转发头，删除会导致消息推送失效。</li>
+    <li>证书续期后执行 <code>sudo nginx -t &amp;&amp; sudo systemctl reload nginx</code>；certbot 会自动配置定时续期。</li>
+    <li>如使用云负载均衡（SLB/CLB/ALB）：监听 443 做 HTTPS 卸载，后端服务器组指向 <code>18080</code>，并放行 <code>/ws</code> 的 Upgrade（空闲超时 ≥ 120 秒）。</li>
+    <li>移动端 H5（<code>18082</code>）建议用独立子域名（如 <code>m.oa.example.com</code>）在 443 反代到 <code>127.0.0.1:18082</code>，配置同上；H5 静态资源按根路径引用，不要挂在子路径下。</li>
+    <li>防火墙：仅放行 22/80/443（<code>sudo ufw allow 22,80,443/tcp &amp;&amp; sudo ufw enable</code>），数据库/缓存/存储端口不放公网。</li>
+  </ul>
+
+  <h3>15.5 首次启动与验收</h3>
+  <ol class="steps">
+    <li>在仓库根目录校验配置：<code>docker compose -f deploy/compose.yml config --quiet</code>。</li>
+    <li>启动并等待健康检查：<code>docker compose -f deploy/compose.yml up -d --wait --wait-timeout 240</code>。首次启动会自动执行数据库迁移（一次性 <code>migrate</code> 服务）并创建存储桶。</li>
+    <li>确认状态：<code>docker compose -f deploy/compose.yml ps</code>（全部 <code>healthy</code> / <code>exited(0)</code>）。</li>
+    <li>浏览器访问 <code>https://oa.example.com</code>，用 <code>deploy/secrets/bootstrap-password</code> 中的初始密码登录管理员账号并强制改密。</li>
+    <li>执行冒烟验证：登录、发起一条测试审批、上传/下载文件、消息中心刷新（验证 WebSocket），确认 443 与 WSS 均正常。</li>
+  </ol>
+  <pre><code># 常用运维命令
+docker compose -f deploy/compose.yml logs -f --tail=200 backend   # 看日志
+docker compose -f deploy/compose.yml restart backend             # 重启后端
+docker compose -f deploy/compose.yml down                       # 停止（保留数据卷）
+docker compose -f deploy/compose.yml down -v                    # 清除数据卷（慎用，仅重装时）</code></pre>
+
+  <h3>15.6 升级发布</h3>
+  <ol class="steps">
+    <li>备份（见 §16.2），确认可恢复；对外公告维护窗口（可临时在 Nginx 返回维护页）。</li>
+    <li>拉取新代码/新镜像并构建（§15.2），记录镜像摘要与迁移版本。</li>
+    <li>执行 <code>docker compose -f deploy/compose.yml up -d --build --wait</code>：数据库迁移自动按版本顺序执行。</li>
+    <li>验证登录、待办、文件、消息后关闭维护窗口；观察错误率与 outbox 失败数。</li>
+    <li>失败回滚：切回上一版本镜像并 <code>up -d</code>；迁移仅前滚不回滚，如需回退结构请用备份恢复（先在隔离环境演练）。</li>
+  </ol>
+
+  <h3>15.7 备份上云与定时任务</h3>
+  <p>备份脚本（<code>scripts/backup-local.ps1</code>）输出数据库 SQL、文件存储归档与 SHA256 校验清单。服务器上建议每天定时备份并异机保存（对象存储/异地机器）：</p>
+  <pre><code># cron 示例：每天 02:30 备份并保留 30 天（将 PowerShell 脚本迁移为 bash 或安装 pwsh）
+30 2 * * *  /opt/agentoa/scripts/backup-local.sh &gt;&gt; /var/log/agentoa-backup.log 2&gt;&amp;1
+# 异机同步示例（对象存储）
+0 4 * * *   rclone copy /opt/agentoa/deploy/backups remote:agentoa-backups/ --min-age 1d</code></pre>
+  <ul>
+    <li>备份成功不等于可恢复：每月至少一次在隔离环境执行恢复并记录 RPO/RTO。</li>
+    <li>保留策略：本地 7 份 + 异地 30 份；备份目录权限收紧，含数据库与文件数据，等同生产数据保护级别。</li>
+    <li>关键业务表也可启用 MySQL binlog，把 RPO 压缩到分钟级（需自行配置 <code>binlog</code> 保留）。</li>
+  </ul>
+
+  <h3>15.8 云环境常见问题</h3>
+  <table>
+    <tr><th>现象</th><th>排查与解决</th></tr>
+    <tr><td>浏览器打不开页面</td><td>安全组是否放行 80/443；<code>curl -I https://oa.example.com</code>；Nginx <code>systemctl status nginx</code>；确认 <code>docker compose ps</code> 中 web 为 healthy</td></tr>
+    <tr><td>登录后一直转圈/接口 502</td><td>后端未就绪或崩溃：<code>docker compose logs backend</code>；首次启动迁移耗时较长，等待 <code>migrate</code> 退出码 0</td></tr>
+    <tr><td>消息/待办不实时推送</td><td>WebSocket 被拦截或 Origin 不匹配：确认反代包含 Upgrade 头；<code>WS_ALLOWED_ORIGINS</code> 必须与浏览器地址栏的 <code>https://域名</code> 完全一致并重启 backend</td></tr>
+    <tr><td>上传文件报 413/失败</td><td>外层 Nginx/负载均衡 <code>client_max_body_size</code> ≥ 21m；应用内上限 20 MiB</td></tr>
+    <tr><td>HTTPS 证书告警</td><td>certbot 续期失败（域名解析/80 端口被占）；证书剩余 &lt; 14 天告警处理</td></tr>
+    <tr><td>磁盘满/服务重启</td><td>检查 Docker 日志与备份堆积（<code>docker system df</code>、<code>deploy/backups/</code>）；扩容数据盘后调整备份保留</td></tr>
+    <tr><td>内存不足 OOM</td><td>4 GiB 机器调低 <code>-XX:MaxRAMPercentage</code>、MySQL 缓存与 Redis <code>--maxmemory</code>；或升级规格</td></tr>
+    <tr><td>忘记改密/需要重置管理员</td><td>服务器读取 <code>deploy/secrets/admin-current-password</code>（或 bootstrap 初值）；见 §17 FAQ</td></tr>
+    <tr><td>迁移失败</td><td>查看 <code>docker compose logs migrate</code> 与 <code>flyway_schema_history</code>；修复后重跑 <code>up -d</code>，失败迁移按 Flyway 规则处理后再启动应用</td></tr>
+  </table>
+  <div class="note ok"><b>上线门槛</b>正式对外开放前，请对照 §16.4 检查清单逐项确认（HTTPS/WSS、密钥、日志轮转、备份恢复演练、监控告警、全量回归），阻断/严重缺陷清零后再放量。</div>
+</section>
+
+<!-- ================= 16 ================= -->
+<section id="admin">
+  <h2>16. 管理员运维</h2>
+  <h3>16.1 系统管理</h3>
+  <ul>
+    <li><b>用户/角色/菜单/部门/岗位</b>：标准 RBAC 维护；菜单权限串变更需与后端注解一致，勿随意删除内置菜单。</li>
+    <li><b>字典管理</b>：员工状态、流程状态、假种、发票类型、任务状态等字典项；业务状态语义请勿随意改动。</li>
+    <li><b>参数/日志</b>：系统参数、操作日志、登录日志（含 requestId，可用于问题追踪）。</li>
+    <li><b>监控</b>：在线用户（可强制下线）、缓存监控、数据监控。</li>
+  </ul>
+  <h3>16.2 备份与恢复</h3>
+  <pre><code># 一致性备份（自动停止 backend/storage 写入 → 导出 MySQL + 归档文件存储 → SHA256 校验）
+./scripts/backup-local.ps1        # 产物在 deploy/backups/&lt;时间戳&gt;/
+
+# 恢复（在隔离环境先演练）
+./scripts/restore-local.ps1</code></pre>
+  <ul>
+    <li>备份包含：数据库 SQL、文件存储归档、SHA256 校验清单；Redis 为会话数据可不备份（恢复后需重新登录）。</li>
+    <li>恢复验证标准：校验和通过、导入后表结构正确、抽样文件可下载。</li>
+    <li>当前建议备份周期 ≤ 24 小时（RPO），恢复目标 ≤ 4 小时（RTO），需按实际演练记录确认。</li>
+    <li>恢复应在隔离环境验证后再执行到生产；恢复后文件服务沿用原 S3 凭据。</li>
+  </ul>
+  <h3>16.3 自检与冒烟</h3>
+  <pre><code># 启动冒烟环境并执行契约冒烟（幂等/越权/状态机/并发用例）
+docker compose -f deploy/compose.yml -f deploy/compose.smoke.yml up -d --wait --wait-timeout 240
+node scripts/smoke.mjs
+
+# 浏览器主流程回归（需本机 Edge + Playwright 环境）
+node scripts/browser-smoke.mjs</code></pre>
+  <h3>16.4 上生产前检查清单</h3>
+  <table>
+    <tr><th>项</th><th>要求</th></tr>
+    <tr><td>传输安全</td><td>配置 HTTPS/WSS（Nginx 证书），关闭非必要端口对外</td></tr>
+    <tr><td>密钥管理</td><td><code>deploy/secrets/</code> 仅服务器本地权限可控；定期轮换数据库/存储/管理员密码</td></tr>
+    <tr><td>账号</td><td>迁移账号、备份账号最小权限；管理员改名 + 强密码</td></tr>
+    <tr><td>日志</td><td>开启日志轮转（Compose 已限 10m×3），接入告警</td></tr>
+    <tr><td>备份</td><td>异机备份 + 定期恢复演练，记录 RPO/RTO</td></tr>
+    <tr><td>监控</td><td>对错误率、待办延迟、outbox 失败数、存储容量、备份任务设置告警</td></tr>
+    <tr><td>验收</td><td>全量回归 + 安全回归 + 容量基线 + 恢复演练 + H5 真机，阻断/严重缺陷清零</td></tr>
+  </table>
+  <h3>16.5 常用排障命令</h3>
+  <pre><code># 查看服务状态与日志
+docker compose -f deploy/compose.yml ps
+docker compose -f deploy/compose.yml logs -f --tail=200 backend
+
+# 数据库连通性（示例）
+docker compose -f deploy/compose.yml exec mysql mysql -uagentoa -p agentoa
+
+# 迁移状态（Flyway 记录表）
+SELECT version, description, success, installed_on FROM flyway_schema_history ORDER BY installed_rank;</code></pre>
+</section>
+
+<!-- ================= 16 ================= -->
+<section id="faq">
+  <h2>17. 常见问题（FAQ）</h2>
+  <table>
+    <tr><th>问题</th><th>处理办法</th></tr>
+    <tr><td>忘记管理员密码</td><td>本地默认为 <code>admin/123456</code>；当前凭据见 <code>deploy/secrets/admin-current-username</code> / <code>admin-current-password</code>；或由管理员在「用户管理」中重置</td></tr>
+    <tr><td>登录接口返回 401「登录失败，请检查凭据或验证码」</td><td>1) 核对账号密码（本地默认 <code>admin/123456</code>）；2) 验证码开启时须先 <code>GET /auth/code</code> 取 <code>captchaCode/captchaUuid</code> 一并提交，或在 <code>deploy/.env</code> 设 <code>CAPTCHA_ENABLED=false</code> 后重启 backend；3) 注意 <code>/api/v1/auth/login</code> 使用 <code>captchaCode/captchaUuid</code> 字段名，<code>/auth/login</code> 使用 <code>code/uuid</code></td></tr>
+    <tr><td>提示「请修改初始密码」无法进入</td><td>账号被标记强制改密，按提示设置 12–72 UTF-8 字节新密码；改密后需重新登录</td></tr>
+    <tr><td>提交申请时报 409（重复/冲突）</td><td>同键重复提交会返回首次结果；若提示版本冲突/状态冲突，请刷新页面后基于最新数据重试</td></tr>
+    <tr><td>看不到某个菜单</td><td>菜单按角色下发，请确认角色已分配并重新登录；仍缺失则联系管理员检查角色菜单授权</td></tr>
+    <tr><td>打开他人链接提示 404/403</td><td>对象级权限拦截（私有日程、未授权知识文档等），属预期行为；需要访问请让所有者授权</td></tr>
+    <tr><td>请假提交提示额度不足</td><td>假期按分钟账本核销，超额直接拒绝；可联系 HR 发假或查看余额台账明细</td></tr>
+    <tr><td>发票提示重复/超额</td><td>同一发票已被占用或累计占用超面额；请核对发票列表中的占用状态，撤销原报销会自动释放</td></tr>
+    <tr><td>付款登记提示重复</td><td>同一笔付款不允许重复登记（幂等保护）；如确需拆分付款请使用多次登记且累计不超应付金额</td></tr>
+    <tr><td>会议预约提示冲突</td><td>时段已被占用（左闭右开，首尾相接不冲突）；请换时段或换会议室</td></tr>
+    <tr><td>文档编辑提示冲突</td><td>他人已发布新版本，请刷新后在最新版本上继续编辑（草稿会保留）</td></tr>
+    <tr><td>收不到消息提醒</td><td>检查右上角消息中心是否有未读（断线自动补拉）；若消息事件失败可在「投递事件」中查询并重投</td></tr>
+    <tr><td>页面打不开 / 接口 502</td><td>执行 <code>docker compose -f deploy/compose.yml ps</code> 与 <code>logs backend</code> 排查；确认 MySQL/Redis/存储已就绪后重启 backend</td></tr>
+    <tr><td>上传文件失败</td><td>检查文件 ≤20 MiB、扩展名/类型允许、存储服务在线；上传后下载 404 表示越权或文件不存在</td></tr>
+    <tr><td>移动端登录后空白</td><td>确认接口地址可达（H5 自带同源反代，确认 <code>18082</code> 入口可达）；小程序需配置合法域名；退出后重新登录</td></tr>
+  </table>
+
+  <div class="note ok"><b>获取更多帮助</b>功能口径与验收细节见仓库 <code>docs/</code> 设计文档（02 需求、05 API 规范、09 交付与验收、20 完成度审查）；问题反馈请附页面路径、操作步骤、时间与响应中的 <code>requestId</code>。</div>
+</section>
+
+<footer>
+  AgentOA 企业协同办公平台 · 用户使用说明 v1.0 ｜ 生成日期 2026-10-05 ｜ 配套文档：<code>docs/20-completion-review.md</code>
+</footer>
+</main>
+</div>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a[href^="#"]'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  function onScroll(){
+    var pos = window.scrollY + 120, idx = 0;
+    for (var i=0;i<sections.length;i++){ if (sections[i] && sections[i].offsetTop <= pos) idx = i; }
+    links.forEach(function(a,i){ a.classList.toggle('active', i===idx); });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  links.forEach(function(a){ a.addEventListener('click', function(){ document.querySelector('nav').classList.remove('open'); }); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "fields": [
+    {
+      "key": "leaveType",
+      "label": "请假类型",
+      "type": "select",
+      "required": true,
+      "options": [
+        {"label": "年假", "value": "annual"},
+        {"label": "调休", "value": "compensatory"},
+        {"label": "病假", "value": "sick"},
+        {"label": "事假", "value": "personal"},
+        {"label": "婚假", "value": "marriage"},
+        {"label": "产假", "value": "maternity"},
+        {"label": "陪产假", "value": "paternity"},
+        {"label": "丧假", "value": "bereavement"}
+      ]
+    },
+    {"key": "startTime", "label": "开始时间", "type": "datetime", "required": true},
+    {"key": "endTime", "label": "结束时间", "type": "datetime", "required": true},
+    {"key": "durationMinutes", "label": "时长（分钟）", "type": "number", "required": true, "readonly": true},
+    {"key": "reason", "label": "事由", "type": "textarea", "required": false}
+  ]
+}

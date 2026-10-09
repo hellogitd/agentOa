@@ -1,0 +1,8 @@
+# Local automated tests only. Restore the base Compose configuration after testing.
+services:
+  backend:
+    environment:
+      CAPTCHA_ENABLED: "false"
+    # AI 段 mock 上游（h5-smoke.mjs 进程内 OpenAI 兼容服务）跑在宿主机，容器内经 host.docker.internal 访问
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

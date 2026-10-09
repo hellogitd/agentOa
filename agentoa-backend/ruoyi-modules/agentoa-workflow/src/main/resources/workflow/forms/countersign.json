@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "fields": [
+    {"key": "title", "label": "事项标题", "type": "input", "required": true},
+    {"key": "reason", "label": "事由", "type": "textarea", "required": true},
+    {"key": "amount", "label": "涉及金额", "type": "number", "required": false}
+  ]
+}

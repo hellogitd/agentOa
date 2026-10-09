@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "fields": [
+    {"key": "effectiveDate", "label": "转正日期", "type": "date", "required": true},
+    {"key": "probationReview", "label": "试用期评价", "type": "textarea", "required": true},
+    {"key": "regularSalary", "label": "转正薪资", "type": "input", "required": false}
+  ]
+}

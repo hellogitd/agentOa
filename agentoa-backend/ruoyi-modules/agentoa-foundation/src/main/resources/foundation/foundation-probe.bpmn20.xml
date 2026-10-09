@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="https://agentoa.local/foundation">
+  <process id="foundationProbe" name="Foundation transaction probe" isExecutable="true">
+    <startEvent id="start"/>
+    <sequenceFlow id="toReview" sourceRef="start" targetRef="review"/>
+    <userTask id="review" name="Verify foundation" flowable:assignee="${assignee}"/>
+    <sequenceFlow id="toEnd" sourceRef="review" targetRef="end"/>
+    <endEvent id="end"/>
+  </process>
+</definitions>
