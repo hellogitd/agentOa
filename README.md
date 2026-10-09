@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 # AgentOA
 
@@ -32,9 +32,9 @@ AgentOA 是一套开箱即用的企业协同办公系统，面向 10–200 人�
 2026 年国庆假期，作者在家用 AI 结对编程，全程约 10 亿 token 完成了从需求分析、架构设计到编码、测试与文档的全部工作：
 
 - 7 天交付 **8 大业务模块**，随后补齐 **AI 能力**（模型接入、对话、RAG、Copilot、Agent/MCP），功能开发完成度约 **96%**
-- **440** 个 REST 接口 · **88** 个业务实体 · **32** 个 Flyway 迁移（V1–V32）
-- **412** 个后端 `@Test`、**360** 项 HTTP/WS 冒烟契约全部通过
-- **96** 个 PC 页面 · **15** 个移动端页面
+- **378** 个业务 REST 接口 · **88** 个业务实体 · **33** 个 Flyway 迁移（V1–V33）
+- **441** 个后端单元 / 集成测试、**494** 项 HTTP/WS 冒烟契约全部通过
+- **96** 个 PC 页面 · **25** 个移动端页面
 - 含一键启动、备份恢复演练、无头浏览器回归、k6 压测脚本与 GitHub Actions CI
 
 如果你也在用 AI 做工程化开发，欢迎交流提 Issue。
@@ -53,7 +53,7 @@ AgentOA 是一套开箱即用的企业协同办公系统，面向 10–200 人�
 | **日程 · 会议 · 任务** | 日程、会议室预订、个人任务、重复日程（RRULE 子集）与系列 / 例外实例 |
 | **报表工作台** | 18 项业务指标、HR / 考勤 / 财务看板、异步导出 |
 | **AI 能力** | 多厂商模型渠道与 Key 双通道治理、SSE 多模态对话、知识库问答（RAG 引用溯源）、业务 Copilot、Agent/MCP 工具编排、用量限额 |
-| **移动端** | uni-app 实现 H5 与微信小程序，15 个页面覆盖登录、工作台、审批、考勤、公告、消息、我的 |
+| **移动端** | uni-app 实现 H5 与微信小程序，25 个页面覆盖登录、工作台、审批、考勤、公告、消息、通讯录、日程、知识库、任务、报销付款、AI 助手与知识问答、我的 |
 
 ## 技术栈
 
@@ -69,7 +69,7 @@ AgentOA 是一套开箱即用的企业协同办公系统，面向 10–200 人�
 
 ## 快速开始
 
-**环境要求**：JDK 17+、Maven、Node 24.14.0、Docker Engine / Compose v2。Windows 下使用 Linux 容器，需设置 `JAVA_HOME`。
+**环境要求**：JDK 17+、Maven、Node 20.19+（实测 24.14.0）、Docker Engine / Compose v2。Windows 下使用 Linux 容器，需设置 `JAVA_HOME`。
 
 ```powershell
 ./scripts/start-local.ps1 -Build
@@ -119,15 +119,18 @@ docker compose -f deploy/compose.yml down   # 停止（不删除持久卷）
 ./scripts/backup-local.ps1             # 备份
 ./scripts/restore-local.ps1            # 恢复
 node scripts/smoke.mjs                 # HTTP/WS 契约冒烟
+node scripts/h5-smoke.mjs              # H5 移动端冒烟
 ```
 
 ## 验证与测试
 
-- 后端 412 个单元 / 集成测试（`mvn verify`）
-- `scripts/smoke.mjs`：360 项 HTTP/WebSocket 契约冒烟，覆盖全部模块（含 AI M1–M5）
-- `scripts/browser-smoke.mjs`：无头浏览器主流程回归
+- 后端 441 个单元 / 集成测试（`mvn verify`，63 个测试类全绿）
+- `scripts/smoke.mjs`：494 项 HTTP/WebSocket 契约冒烟，覆盖全部模块（含 AI M1–M5）
+- `scripts/browser-smoke.mjs`：无头浏览器主流程回归（断网 / 恢复、消息端到端时延、axe-core 无障碍初筛）
+- `scripts/h5-smoke.mjs`：H5 移动端无头冒烟（登录 / 审批 / 打卡 / 消息 / AI）
+- `agentoa-frontend`：typecheck / vitest / eslint 门禁（vitest 110 例纯函数用例）
 - `scripts/loadtest/`：k6 压测场景（200 VU 混合负载）
-- `.github/workflows/verify.yml`：CI 构建 + 测试 + 起栈 + 冒烟
+- `.github/workflows/verify.yml`：CI 后端测试 + 端侧门禁 + 起栈 + smoke / h5-smoke
 - 备份恢复演练记录见 `deploy/backups/`
 
 ## 项目状态
@@ -139,7 +142,7 @@ node scripts/smoke.mjs                 # HTTP/WS 契约冒烟
 | P1 增强（调薪合同、流程加签委托、排班预算、模板推送、假期 FIFO、会签或签、发票拆分、重复日程、目录 ACL） | 已交付 |
 | 模块 10 AI（模型接入 / 对话 / RAG / Copilot / Agent） | 已交付（[21](docs/21-module-plan-ai.md)） |
 | 移动端 H5 / 微信小程序 | 功能开发完成，真机验收未做（补强与验收计划见 [23](docs/23-module-plan-h5.md)） |
-| 端侧补强计划（PC F1–F5 / H5 H1–H7，含移动 AI） | 计划已定稿（[22](docs/22-module-plan-frontend.md) / [23](docs/23-module-plan-h5.md)），待排期 |
+| 端侧补强计划（PC F1–F5 / H5 H1–H7，含移动 AI） | 已交付（F1/F3/F4/F5-03、H1–H6；F2 决策 B 冻结、F5-02 转 v1.1；[22](docs/22-module-plan-frontend.md) / [23](docs/23-module-plan-h5.md)），浏览器兼容矩阵与 H7 真机验收待人工（[24](docs/24-release-acceptance-checklist.md)） |
 | 模块 9 发布验收（HTTPS/WSS、容量压测、RPO/RTO 演练、培训试点） | 未实施 |
 
 **不包含**：在线可视化流程设计器（采用固定模板）、生产上线验收。生产域名、HTTPS、异机恢复与容量验收需在部署环境另行配置验证。
@@ -165,6 +168,7 @@ node scripts/smoke.mjs                 # HTTP/WS 契约冒烟
 | [19 · 发布验收计划](docs/19-module-plan-release.md) | H5、性能、恢复与 v1.0 发布门槛 |
 | [21 · AI 能力计划](docs/21-module-plan-ai.md) | 模型接入层、对话、RAG 问答、Copilot、Agent/MCP 分期 |
 | [22 · PC 前端计划](docs/22-module-plan-frontend.md) · [23 · H5/移动端计划](docs/23-module-plan-h5.md) | 端侧现状盘点、差距登记与补强分期（F1–F5 / H1–H7） |
+| [24 · 发布验收清单](docs/24-release-acceptance-checklist.md) | 人工验收执行与签署（浏览器矩阵、无障碍、真机验收） |
 | [使用说明](docs/user-manual.html) | 用户手册（含云端部署章节） |
 
 ## 贡献
@@ -192,9 +196,9 @@ The backend is built on [RuoYi-Vue-Plus](https://github.com/dromara/RuoYi-Vue-Pl
 During the 2026 National Day holiday, this project was built at home by one person working with AI pair programming — about **1 billion tokens** across requirements, architecture, code, tests and docs:
 
 - **8 business modules** delivered in 7 days, then completed **AI capabilities** (model access, chat, RAG, copilot, agent/MCP) — ~**96%** feature completion
-- **440** REST endpoints · **88** business entities · **32** Flyway migrations (V1–V32)
-- **412** backend `@Test` cases and **360** HTTP/WS smoke contract checks, all passing
-- **96** PC pages · **15** mobile pages
+- **378** business REST endpoints · **88** business entities · **33** Flyway migrations (V1–V33)
+- **441** backend unit/integration tests and **494** HTTP/WS smoke contract checks, all passing
+- **96** PC pages · **25** mobile pages
 - One-command local stack, backup/restore drills, headless-browser regression, k6 load tests, GitHub Actions CI
 
 If you are also building software with AI, issues and discussions are welcome.
@@ -213,7 +217,7 @@ If you are also building software with AI, issues and discussions are welcome.
 | **Calendar · Meeting · Tasks** | Events, meeting-room booking, personal tasks, recurring events (RRULE subset) with series/exception instances |
 | **Reporting** | 18 business metrics, HR / attendance / finance dashboards, async export |
 | **AI capabilities** | Multi-provider model channels with dual-channel key management, SSE multimodal chat, knowledge Q&A (RAG with citations), business copilot, agent/MCP tool orchestration, usage quotas |
-| **Mobile** | uni-app H5 & WeChat mini-program, 15 pages covering login, workbench, approvals, attendance, announcements, messages, profile |
+| **Mobile** | uni-app H5 & WeChat mini-program, 25 pages covering login, workbench, approvals, attendance, announcements, messaging, contacts, calendar, knowledge, tasks, reimbursements & payments, AI assistant & knowledge Q&A, profile |
 
 ## Tech stack
 
@@ -229,7 +233,7 @@ If you are also building software with AI, issues and discussions are welcome.
 
 ## Quick start
 
-**Requirements**: JDK 17+, Maven, Node 24.14.0, Docker Engine / Compose v2. On Windows use Linux containers and set `JAVA_HOME`.
+**Requirements**: JDK 17+, Maven, Node 20.19+ (verified with 24.14.0), Docker Engine / Compose v2. On Windows use Linux containers and set `JAVA_HOME`.
 
 ```powershell
 ./scripts/start-local.ps1 -Build
@@ -279,15 +283,18 @@ docker compose -f deploy/compose.yml down   # Stop (keeps persistent volumes)
 ./scripts/backup-local.ps1             # Backup
 ./scripts/restore-local.ps1            # Restore
 node scripts/smoke.mjs                 # HTTP/WS contract smoke tests
+node scripts/h5-smoke.mjs              # H5 mobile smoke
 ```
 
 ## Verification & testing
 
-- 412 backend unit/integration tests (`mvn verify`)
-- `scripts/smoke.mjs`: 360 HTTP/WebSocket contract smoke checks across all modules (incl. AI M1–M5)
-- `scripts/browser-smoke.mjs`: headless-browser main-flow regression
+- 441 backend unit/integration tests (`mvn verify`, 63 test classes green)
+- `scripts/smoke.mjs`: 494 HTTP/WebSocket contract smoke checks across all modules (incl. AI M1–M5)
+- `scripts/browser-smoke.mjs`: headless-browser main-flow regression (offline/recovery, message latency, axe-core a11y pre-scan)
+- `scripts/h5-smoke.mjs`: mobile H5 headless smoke (login / approvals / punch / messages / AI)
+- `agentoa-frontend`: typecheck / vitest / eslint gates (110 pure-function vitest cases)
 - `scripts/loadtest/`: k6 load scenarios (200 VU mixed workload)
-- `.github/workflows/verify.yml`: CI build + tests + stack startup + smoke
+- `.github/workflows/verify.yml`: CI backend tests + client gates + stack startup + smoke / h5-smoke
 - Backup/restore drill artifacts under `deploy/backups/`
 
 ## Project status
@@ -299,7 +306,7 @@ node scripts/smoke.mjs                 # HTTP/WS contract smoke tests
 | P1 enhancements (salary & contracts, add-sign & delegation, scheduling & budgets, templates & scheduled push, leave FIFO, countersign/or-sign, split payments, recurring events, directory ACL) | Delivered |
 | Module 10 AI (model access / chat / RAG / copilot / agent) | Delivered ([21](docs/21-module-plan-ai.md)) |
 | Mobile H5 / WeChat mini-program | Feature-complete, real-device acceptance pending (see [23](docs/23-module-plan-h5.md)) |
-| Client-side hardening plans (PC F1–F5 / H5 H1–H7, incl. mobile AI) | Plans finalized ([22](docs/22-module-plan-frontend.md) / [23](docs/23-module-plan-h5.md)), awaiting scheduling |
+| Client-side hardening plans (PC F1–F5 / H5 H1–H7, incl. mobile AI) | Delivered (F1/F3/F4/F5-03, H1–H6; F2 frozen as decision B, F5-02 moved to v1.1; [22](docs/22-module-plan-frontend.md) / [23](docs/23-module-plan-h5.md)); browser matrix & H7 real-device acceptance pending manual ([24](docs/24-release-acceptance-checklist.md)) |
 | Module 9 release acceptance (HTTPS/WSS, load testing, RPO/RTO drills, training & pilot) | Not started |
 
 **Not included**: online visual workflow designer (fixed templates are used instead), production go-live acceptance. Production domains, HTTPS, cross-host recovery and capacity verification must be configured and validated in your target environment.
@@ -325,6 +332,7 @@ node scripts/smoke.mjs                 # HTTP/WS contract smoke tests
 | [19 · Release acceptance plan](docs/19-module-plan-release.md) | H5, performance, recovery and v1.0 gates |
 | [21 · AI capability plan](docs/21-module-plan-ai.md) | Model access, chat, RAG Q&A, copilot, agent/MCP phases |
 | [22 · PC frontend plan](docs/22-module-plan-frontend.md) · [23 · H5/mobile plan](docs/23-module-plan-h5.md) | Client-side baseline, gap register and hardening phases (F1–F5 / H1–H7) |
+| [24 · Release acceptance checklist](docs/24-release-acceptance-checklist.md) | Manual acceptance execution & sign-off (browser matrix, a11y, real-device) |
 | [User manual](docs/user-manual.html) | End-user manual (incl. cloud deployment) |
 
 ## Contributing
